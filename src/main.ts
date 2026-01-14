@@ -42,42 +42,6 @@ export default class HierarchicalTocPlugin extends Plugin
 			},
 		});
 
-		this.addCommand({
-			id: "add_folder",
-			name: "Add folder",
-			icon: "folder-plus",
-			callback: () => {
-				this.VF_AddFolder();
-			},
-		});
-
-		this.addCommand({
-			id: "replace_folder",
-			name: "Move folder",
-			icon: "folder-output",
-			callback: () => {
-				this.VF_MoveFolder();
-			},
-		});
-
-		this.addCommand({
-			id: "remove_folder",
-			name: "Delete folder",
-			icon: "folder-minus",
-			callback: () => {
-				this.VF_RemoveFolder();
-			},
-		});
-
-		this.addCommand({
-			id: "reveal_active_file",
-			name: "Reveal file",
-			icon: "folder-search-2",
-			callback: () => {
-			  this.VF_RevealActiveFile();
-			},
-		});
-
 		this.app.workspace.onLayoutReady(() =>
 		{
 			// reactive
@@ -221,69 +185,8 @@ export default class HierarchicalTocPlugin extends Plugin
 		this.activateView();
 	}
 
-	VF_RevealActiveFile()
-	{
-		this.activateView();
-
-		let file = this.app.workspace.getActiveFile();
-		if(!file) return;
-
-		let path = this.base.get_next_path(file.path);
-		if(path) this.revealFile(path);
-	}
-
 	updateUsedTime(file_id:string)
     {
         this.base.note_list[file_id].utime = Date.now();
     }
-
-	VF_AddFolder()
-	{
-		let file = this.app.workspace.getActiveFile();
-		if(!file) return;
-
-		// 1. select file
-		new VF_SelectFile(this, (file_id:string) =>
-			{
-				// 2. add to yaml
-				this.yaml.add_link(this.settings.propertyName, file_id);
-				this.updateUsedTime(file_id);
-				this.update_data();
-			}
-		).open();
-	}
-
-	VF_MoveFolder()
-	{
-		let file = this.app.workspace.getActiveFile();
-		if(!file) return;
-
-		// 1. select old link
-		new VF_SelectPropModal (this, this.settings.propertyName, (old_link:string) =>
-			{
-				// 2. select new link
-				new VF_SelectFile(this, (file_id:string) =>
-					{
-						// 3. replace link
-						this.yaml.replace_link(this.settings.propertyName, old_link, file_id);
-						this.updateUsedTime(file_id);
-						this.update_data();
-					}
-				).open();
-			}
-		).open();
-	}
-
-	VF_RemoveFolder()
-	{
-		// 1. select old link
-		new VF_SelectPropModal (this, this.settings.propertyName, (old_link:string) =>
-			{
-				// 2. remove it from the list
-				this.yaml.remove_link(this.settings.propertyName, old_link);
-				this.update_data();
-			}
-		).open();
-	}
 }
-
