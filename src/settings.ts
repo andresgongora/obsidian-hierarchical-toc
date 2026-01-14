@@ -24,7 +24,7 @@ export interface HierarchicalTocSettings
 export const DEFAULT_SETTINGS: Partial<HierarchicalTocSettings> =
 {
 	ignorePath: '',
-	propertyName: 'Folders',
+	propertyName: 'up',
 	titleProp: '',
 	cmdShowTitle: false,
 	sortTreeBy: SortTypes.file_name,
