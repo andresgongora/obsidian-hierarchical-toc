@@ -1,7 +1,7 @@
 import { App, SuggestModal, Notice } from 'obsidian';
 import { BaseScanner } from 'base_scanner';
 import { YamlParser } from 'yaml_parser';
-import  VirtFolderPlugin  from 'main';
+import  HierarchicalTocPlugin  from 'main';
 
 function get_link_base(link:string)
 {
@@ -21,7 +21,7 @@ function get_link_base(link:string)
         if (match[2]) result = match[2];
         if (match[3]) result = match[3];
     }
-    
+
     return result;
 }
 
@@ -35,8 +35,8 @@ export class VF_SelectPropModal  extends SuggestModal<NoteLink>
 {
     useMarkdownLinks: boolean;
     prop_list: string[];
-    
-	constructor(private plugin: VirtFolderPlugin, private yamlProp:string, private onSubmit: (result: string) => void)
+
+	constructor(private plugin: HierarchicalTocPlugin, private yamlProp:string, private onSubmit: (result: string) => void)
 	{
 		super(plugin.app);
         this.app = plugin.app;
@@ -54,7 +54,7 @@ export class VF_SelectPropModal  extends SuggestModal<NoteLink>
                 new Notice(`${this.yamlProp} is empty`)
 				return;
 			}
-	
+
 			if(links.length == 1)
 			{
                 // return immediately if only one link
@@ -66,7 +66,7 @@ export class VF_SelectPropModal  extends SuggestModal<NoteLink>
             super.open();
 		});
     }
-    
+
     async getSuggestions(query: string): Promise<NoteLink[]>
     {
 		let notes: NoteLink[] = [];
@@ -83,7 +83,7 @@ export class VF_SelectPropModal  extends SuggestModal<NoteLink>
                 notes.push({name:name, full:item})
             }
 		}
-        
+
         return notes;
     }
 

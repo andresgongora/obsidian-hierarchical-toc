@@ -1,17 +1,17 @@
 import { ItemView, WorkspaceLeaf } from "obsidian";
 import Component from "./components/Component.svelte";
 import { plugin } from './components/stores';
-import VirtFolderPlugin  from './main';
+import HierarchicalTocPlugin  from './main';
 
 export const TREE_ICON = "folder-tree";
-export const VIEW_TYPE_VF = "virt-folder-view";
+export const VIEW_TYPE_VF = "hierarchical-toc-view";
 
-export class VirtFolderView extends ItemView
+export class HierarchicalTocView extends ItemView
 {
 	component: Component;
 	icon = TREE_ICON;
 
-	constructor(leaf: WorkspaceLeaf, private plugin: VirtFolderPlugin) {
+	constructor(leaf: WorkspaceLeaf, private plugin: HierarchicalTocPlugin) {
 		super(leaf);
 	}
 
@@ -20,7 +20,7 @@ export class VirtFolderView extends ItemView
 	}
 
 	getDisplayText() {
-		return "VirtFolder";
+		return "Hierarchical TOC";
 	}
 
   async onOpen() {

@@ -1,11 +1,11 @@
 {
-	"id": "virt-folder",
-	"name": "VirtFolder",
-	"version": "1.0.7",
+	"id": "hierarchical-toc",
+	"name": "Hierarchical TOC",
+	"version": "1.0.0",
 	"minAppVersion": "0.15.0",
-	"description": "Creating a hierarchical structure like Luhmann's Zettelkasten",
+	"description": "Displays child notes of the active note in a hierarchical tree view (fork of Virtual Folder)",
 
-	"author": "mr.grogrig",
-	"authorUrl": "https://github.com/gr0grig",
+	"author": "andresgongora",
+	"authorUrl": "https://github.com/andresgongora",
 	"isDesktopOnly": false
 }

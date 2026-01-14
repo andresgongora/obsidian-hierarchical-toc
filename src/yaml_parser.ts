@@ -1,11 +1,11 @@
 import { App, Notice, TFile } from 'obsidian';
-import  VirtFolderPlugin  from 'main';
+import  HierarchicalTocPlugin  from 'main';
 
 export class YamlParser
 {
-	constructor(private app: App, private plugin: VirtFolderPlugin)
+	constructor(private app: App, private plugin: HierarchicalTocPlugin)
 	{
-        
+
 	}
 
     showMessage(msg: string)
@@ -17,15 +17,15 @@ export class YamlParser
     {
         let file = this.app.vault.getFileByPath(selected);
         if(!file) return;
-    
+
         let link = this.app.metadataCache.fileToLinktext(file, '');
         let formated_link = `[[${link}]]`;
-    
+
         if(!this.plugin.settings.UseWikiLinks)
         {
             formated_link = `[${link}](${link})`;
         }
-        
+
         // add link to Folders
         if (prop in front && front[prop])
         {
@@ -40,7 +40,7 @@ export class YamlParser
         {
             front[prop] = [];
         }
-        
+
         front[prop].push(formated_link);
         this.showMessage(`Set ${prop}: ${link}`);
     }
@@ -56,15 +56,15 @@ export class YamlParser
     {
         let file = this.app.vault.getFileByPath(selected);
         if(!file) return;
-    
+
         let link = this.app.metadataCache.fileToLinktext(file, '');
         let formated_link = `[[${link}]]`;
-    
+
         if(!this.plugin.settings.UseWikiLinks)
         {
             formated_link = `[${link}](${link})`;
         }
-        
+
         if (prop in front && front[prop])
         {
             if(front[prop].contains(formated_link))
@@ -136,7 +136,7 @@ export class YamlParser
         let file = this.app.workspace.getActiveFile();
         if(!file) return;
         this.app.fileManager.processFrontMatter(file, (fm) => { this._fm_remove_link(fm, yamlProp, old_link); });
-    }    
+    }
 };
 
 

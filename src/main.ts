@@ -5,16 +5,16 @@ import { NoteData } from './data';
 import { BaseScanner } from 'base_scanner';
 import { VF_SelectFile } from './select_file_modal';
 import { VF_SelectPropModal  } from './select_prop_modal';
-import { VIEW_TYPE_VF, VirtFolderView as VirtFolderView } from 'tree_view';
+import { VIEW_TYPE_VF, HierarchicalTocView as HierarchicalTocView } from 'tree_view';
 import { YamlParser } from 'yaml_parser';
-import { VirtFolderSettingTab, VirtFolderSettings, DEFAULT_SETTINGS } from 'settings';
+import { HierarchicalTocSettingTab, HierarchicalTocSettings, DEFAULT_SETTINGS } from 'settings';
 
-export default class VirtFolderPlugin extends Plugin
+export default class HierarchicalTocPlugin extends Plugin
 {
 	data: NoteData;
 	base: BaseScanner;
 	yaml: YamlParser;
-	settings: VirtFolderSettings;
+	settings: HierarchicalTocSettings;
 
 	async onload()
 	{
@@ -24,11 +24,11 @@ export default class VirtFolderPlugin extends Plugin
 		this.data = new NoteData(this.base);
 		this.yaml = new YamlParser(this.app, this);
 
-		this.addSettingTab(new VirtFolderSettingTab(this.app, this));
+		this.addSettingTab(new HierarchicalTocSettingTab(this.app, this));
 
 		this.registerView(
 			VIEW_TYPE_VF,
-			(leaf) => new VirtFolderView(leaf, this)
+			(leaf) => new HierarchicalTocView(leaf, this)
 		  );
 
 		// add cmd - pin folder (icon='folder-heart')
@@ -188,7 +188,7 @@ export default class VirtFolderPlugin extends Plugin
 	{
 		for (const leaf of this.app.workspace.getLeavesOfType(VIEW_TYPE_VF))
 		{
-			if (!(leaf.view instanceof VirtFolderView)) continue;
+			if (!(leaf.view instanceof HierarchicalTocView)) continue;
 			leaf.view.component.focusTo(path);
 		}
 	}

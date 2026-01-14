@@ -1,6 +1,6 @@
 import { App, TFile } from 'obsidian';
 import { OneNote } from 'onenote';
-import  VirtFolderPlugin  from 'main';
+import  HierarchicalTocPlugin  from 'main';
 import { SortTypes } from 'settings';
 
 function _is_string(value:any)
@@ -44,7 +44,7 @@ export class BaseScanner
     last_active: string[] = ["1"];
     settings: ScanSettings = new ScanSettings();
 
-    constructor(private app: App, private plugin: VirtFolderPlugin)
+    constructor(private app: App, private plugin: HierarchicalTocPlugin)
     {
 
     }

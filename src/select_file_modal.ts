@@ -1,6 +1,6 @@
 import { App, FuzzySuggestModal, Notice, FuzzyMatch } from 'obsidian';
 import { OneNote } from 'onenote';
-import  VirtFolderPlugin  from 'main';
+import  HierarchicalTocPlugin  from 'main';
 
 interface ShowedItem
 {
@@ -15,7 +15,7 @@ export class VF_SelectFile extends FuzzySuggestModal<ShowedItem>
 {
 	selected: string = '';
 
-	constructor(private plugin: VirtFolderPlugin, private onSubmit: (result: string) => void)
+	constructor(private plugin: HierarchicalTocPlugin, private onSubmit: (result: string) => void)
 	{
 		super(plugin.app);
 		this.setPlaceholder('Type note\'s title');
@@ -23,7 +23,7 @@ export class VF_SelectFile extends FuzzySuggestModal<ShowedItem>
 
 	getAliases(note: OneNote)
 	{
-		// next time			
+		// next time
 	}
 
 	getItemName(item: ShowedItem)
@@ -38,7 +38,7 @@ export class VF_SelectFile extends FuzzySuggestModal<ShowedItem>
 	}
 
 	getItems(): ShowedItem[]
-	{	
+	{
 		let notes: ShowedItem[] = [];
 
 		for (let id in this.plugin.base.note_list)
@@ -70,16 +70,16 @@ export class VF_SelectFile extends FuzzySuggestModal<ShowedItem>
         return links;
 	}
 
-	renderSuggestion(item: FuzzyMatch<ShowedItem>, el: HTMLElement): void 
+	renderSuggestion(item: FuzzyMatch<ShowedItem>, el: HTMLElement): void
 	{
 		el.createEl('div', {text: this.getItemName(item.item)});
-        let small = el.createEl('small', {cls: 'vf_search_parents'});	
+        let small = el.createEl('small', {cls: 'vf_search_parents'});
 
         for(let parent of item.item.parents)
         {
             let path: any = this.plugin.base.get_shortest_path(parent);
             let links = this._format_parents(path);
-            let line = small.createEl('div', {cls:'vf_serach_div'});	
+            let line = small.createEl('div', {cls:'vf_serach_div'});
 
             for(let id of links)
             {

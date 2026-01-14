@@ -1,16 +1,28 @@
-# VirtFolder plugin
-A plugin for creating a hierarchical structure in Obsidian.
+# Hierarchical TOC Plugin
 
-Allows you to quickly find notes by navigating the knowledge base like a book table of contents.
+A plugin for displaying child notes of the currently active note in a hierarchical tree view.
 
-![virt_folder_example](./Images/virt_folder_example.png)
+## About
 
-## Example
+This plugin is a fork of [obsidian-virt-folder](https://github.com/gr0grig/obsidian-virt-folder) by
+gr0grig. I am very thankful to the original author for creating such a useful foundation.
 
-https://github.com/user-attachments/assets/a4990b31-c8ea-48c8-815a-98521d81fc7d
+**Key Difference**: While the original Virtual Folder plugin provides an overview of your entire vault's hierarchical structure, this plugin is modified to serve as a **Table of Contents (TOC) for the currently active note**. It displays only the child notes of the active note, not the entire vault hierarchy.
 
-The current version adds a setting for YAML fields and ignored directories.
+## How It Works
 
-## Documentation
-The current documentation for the [plugin](https://github.com/gr0grig/obsidian-virt-folder/) is located on [GitBook](https://virtfolder.gitbook.io/index)
+The plugin shows a tree view in the sidebar that displays notes linked by parent-child
+relationships:
 
+- Notes should have a YAML frontmatter field `parent` with the name of the parent note
+- When you open a note, the tree view automatically refreshes to show its children
+- You can expand nodes to see their children one level at a time
+- The tree view starts collapsed on each refresh
+
+## Further Reading
+
+For a comprehensive understanding of hierarchical note structures and the original plugin's
+capabilities, please refer to:
+
+- [Original Virtual Folder plugin](https://github.com/gr0grig/obsidian-virt-folder/)
+- [Virtual Folder documentation on GitBook](https://virtfolder.gitbook.io/index)

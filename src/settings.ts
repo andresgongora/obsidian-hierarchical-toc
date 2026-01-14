@@ -1,5 +1,5 @@
 import { App, PluginSettingTab, Setting, TextAreaComponent, TextComponent, DropdownComponent, ToggleComponent } from 'obsidian';
-import VirtFolderPlugin  from './main';
+import HierarchicalTocPlugin  from './main';
 
 export enum SortTypes
 {
@@ -9,7 +9,7 @@ export enum SortTypes
 	modification_time = "modification_time",
 };
 
-export interface VirtFolderSettings
+export interface HierarchicalTocSettings
 {
 	ignorePath: string;
 	propertyName: string;
@@ -21,7 +21,7 @@ export interface VirtFolderSettings
 	showChildCount: boolean;
 }
 
-export const DEFAULT_SETTINGS: Partial<VirtFolderSettings> =
+export const DEFAULT_SETTINGS: Partial<HierarchicalTocSettings> =
 {
 	ignorePath: '',
 	propertyName: 'Folders',
@@ -33,12 +33,12 @@ export const DEFAULT_SETTINGS: Partial<VirtFolderSettings> =
 	showChildCount: true,
 };
 
-export class VirtFolderSettingTab extends PluginSettingTab
+export class HierarchicalTocSettingTab extends PluginSettingTab
 {
-	plugin: VirtFolderPlugin;
+	plugin: HierarchicalTocPlugin;
 	counter: TextComponent;
 
-	constructor(app: App, plugin: VirtFolderPlugin) {
+	constructor(app: App, plugin: HierarchicalTocPlugin) {
 		super(app, plugin);
 		this.plugin = plugin;
 		this.init_settings();
