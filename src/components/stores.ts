@@ -10,3 +10,4 @@ export const centered_id = writable<string>();
 export const centered_children = writable<string[]>([]);
 export const show_child_count = writable<boolean>(true);
 export const auto_expand_tree = writable<boolean>(false);
+export const auto_expand_depth = writable<number>(0);

@@ -6,7 +6,7 @@
 	export let type = "sub_note"; // or "top_dir" or "orphan_dir" or "centered_note"
 	export let node_path: string[] = []; // set by parents
 
-	import { getPlugin, data, active_id, show_child_count, auto_expand_tree } from "./stores";
+	import { getPlugin, data, active_id, show_child_count, auto_expand_tree, auto_expand_depth } from "./stores";
 	import { slide } from "svelte/transition";
 	import { getIcon } from "obsidian";
 	import { OneNote } from "onenote";
@@ -18,7 +18,9 @@
 	let note: OneNote;
 
 	let title = id;
-	let isCollapsed = !$auto_expand_tree;
+	// Calculate if this node should be collapsed based on depth limit
+	// node_path.length represents current depth (0-indexed from root)
+	let isCollapsed = !$auto_expand_tree || ($auto_expand_depth > 0 && node_path.length >= $auto_expand_depth);
 	let IsOpened = false;
 
     let childCounter = 0;

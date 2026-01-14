@@ -20,6 +20,7 @@ export interface HierarchicalTocSettings
 	UseWikiLinks: boolean;
 	showChildCount: boolean;
 	autoExpandTree: boolean;
+	autoExpandDepth: number;
 }
 
 export const DEFAULT_SETTINGS: Partial<HierarchicalTocSettings> =
@@ -33,6 +34,7 @@ export const DEFAULT_SETTINGS: Partial<HierarchicalTocSettings> =
 	UseWikiLinks: true,
 	showChildCount: true,
 	autoExpandTree: false,
+	autoExpandDepth: 0,
 };
 
 export class HierarchicalTocSettingTab extends PluginSettingTab
@@ -238,6 +240,33 @@ export class HierarchicalTocSettingTab extends PluginSettingTab
 				await this.plugin.saveSettings();
 				this.update_auto_expand();
 			});
+		});
+
+
+		new Setting(containerEl)
+		.setName("Auto-expand depth limit")
+		.setDesc("If auto expand ON, maximum expansion depth (0 = expand all, positive number = limit depth)")
+		.addText((text: TextComponent) =>
+		{
+			text.setValue(this.plugin.settings.autoExpandDepth.toString());
+			text.setPlaceholder('0')
+			text.onChange(async (value) =>
+			{
+				let style = text.inputEl.style;
+				const numValue = parseInt(value);
+
+				if(!isNaN(numValue) && numValue >= 0)
+				{
+					style.borderColor = '';
+					this.plugin.settings.autoExpandDepth = numValue;
+					await this.plugin.saveSettings();
+					this.update_auto_expand();
+				}else{
+					style.borderColor = this.get_css_var('--background-modifier-error');
+				}
+			});
+			text.inputEl.type = 'number';
+			text.inputEl.min = '0';
 		});
 
 	}
