@@ -40,7 +40,6 @@ export class BaseScanner
 {
     note_list:  {[id: string] : OneNote} = {};
     top_list: string[] = [];
-    orphans_list: string[] = [];
     last_active: string[] = ["1"];
     settings: ScanSettings = new ScanSettings();
 
@@ -200,35 +199,18 @@ export class BaseScanner
         }
     }
 
-    is_orphan(note:OneNote)
-    {
-        return note.is_no_parents() && note.is_no_children();
-    }
-
     is_top(note:OneNote)
     {
         return note.is_no_parents() && note.has_children();
     }
 
-    is_orphan_or_top(note:OneNote)
-    {
-        return note.is_no_parents();
-    }
-
     build_top()
     {
-        this.orphans_list = [];
         this.top_list = [];
 
         for(let i in this.note_list)
         {
             let note = this.note_list[i];
-
-            if(this.is_orphan(note))
-            {
-                this.orphans_list.push(note.id);
-                continue;
-            }
 
             if(this.is_top(note))
             {
@@ -315,7 +297,6 @@ export class BaseScanner
             note.children = this.l_sort(note.children);
         }
 
-        this.orphans_list = this.l_sort(this.orphans_list);
         this.top_list = this.l_sort(this.top_list);
     }
 
@@ -351,13 +332,6 @@ export class BaseScanner
         if(this._is_recursion(path)) return;
 
         // down-to-top, search from last to root
-        if(this.is_orphan(note))
-        {
-            let new_path = ['orphan_dir'].concat(path);
-            path_list.push(new_path);
-            return;
-        }
-
         if(this.is_top(note))
         {
             let new_path = ['top_dir'].concat(path);

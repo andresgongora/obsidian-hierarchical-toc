@@ -3,7 +3,7 @@
 	// based on `obsidian-dendron-tree-1.3.0`
 
 	export let id = "unknown-link-id";
-	export let type = "sub_note"; // or "top_dir" or "orphan_dir" or "centered_note"
+	export let type = "sub_note"; // or "top_dir" or "centered_note"
 	export let node_path: string[] = []; // set by parents
 
 	import { getPlugin, data, active_id, show_child_count, auto_expand_tree, auto_expand_depth } from "./stores";
@@ -37,13 +37,6 @@
 			title = 'ROOT';
 			childCounter = $data.top_list.length;
 			childList = $data.top_list;
-		}
-
-		if(type == "orphan_dir")
-		{
-			title = 'Orphans';
-			childCounter = $data.orphans_list.length;
-			childList = $data.orphans_list;
 		}
 
 		if(type == "centered_note")
@@ -91,7 +84,7 @@
 
     function openNote(id:string, new_tab:boolean = false)
     {
-		if(type == "top_dir" || type == "orphan_dir" || type == "centered_note")
+		if(type == "top_dir" || type == "centered_note")
 		{
 			return;
 		}
