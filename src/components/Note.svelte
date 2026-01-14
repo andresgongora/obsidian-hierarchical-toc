@@ -3,17 +3,17 @@
 	// based on `obsidian-dendron-tree-1.3.0`
 
 	export let id = "unknown-link-id";
-	export let type = "sub_note"; // or "top_dir" or "orphan_dir"
+	export let type = "sub_note"; // or "top_dir" or "orphan_dir" or "centered_note"
 	export let node_path: string[] = []; // set by parents
 
-	import { getPlugin, data, active_id } from "./stores";
+	import { getPlugin, data, active_id, show_child_count } from "./stores";
 	import { slide } from "svelte/transition";
 	import { getIcon } from "obsidian";
 	import { OneNote } from "onenote";
 	import type { Action } from "svelte/action";
 	import { tick } from "svelte";
-	
-    
+
+
     let plugin = getPlugin();
 	let note: OneNote;
 
@@ -44,6 +44,18 @@
 			childList = $data.orphans_list;
 		}
 
+		if(type == "centered_note")
+		{
+			note = $data.note_list[id];
+
+			if (note)
+			{
+				title = note.title;
+				childCounter = note.count_children();
+				childList = note.children;
+			}
+		}
+
 		if(type == "sub_note")
 		{
 			note = $data.note_list[id];
@@ -63,7 +75,7 @@
 
 	let expandTransitionWaiter: Promise<void> = Promise.resolve();
 	let expandTransitionEnd: (value: void) => void;
-	
+
 	function expandTransitionStart() {
 		expandTransitionWaiter = new Promise((resolve) => {
 			expandTransitionEnd = resolve;
@@ -77,13 +89,13 @@
 
     function openNote(id:string, new_tab:boolean = false)
     {
-		if(type == "top_dir" || type == "orphan_dir")
+		if(type == "top_dir" || type == "orphan_dir" || type == "centered_note")
 		{
 			return;
 		}
 
 		// is file exist ?
-        plugin.app.workspace.openLinkText(id, id, new_tab);   
+        plugin.app.workspace.openLinkText(id, id, new_tab);
     }
 
 	function scrollIntoMiddle()
@@ -95,7 +107,7 @@
 		myElement.win.scrollTo(0, middle);
 	}
 
-	export const focusNotes = async (pathNotes: string[]) => 
+	export const focusNotes = async (pathNotes: string[]) =>
 	{
 		isCollapsed = false;
 		await tick();
@@ -103,9 +115,9 @@
 		let next:string|undefined = pathNotes.shift();
 
 		if(pathNotes.length === 0) await expandTransitionWaiter;
-		
+
 		if(!next)
-		{	
+		{
 			if(myElement)
 			{
 				//scrollIntoMiddle();
@@ -139,18 +151,18 @@
 				openNote(id, false);
 				return;
 			}
-			
+
 			if(event.ctrlKey)
 			{
 				openNote(id, true);
 				return;
 			}
-			
+
 			isCollapsed = false;
 			openNote(id);
 		}}
 	>
-        
+
     {#if childCounter > 0}
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
 		<div
@@ -162,12 +174,12 @@
             use:collapsedIcon
 		/>
     {/if}
-    
+
 		<div class="tree-item-inner">
-			{title} 
+			{title}
 		</div>
 
-    {#if childCounter > 0}
+    {#if childCounter > 0 && $show_child_count}
         <span class="counter">
             {childCounter}
         </span>

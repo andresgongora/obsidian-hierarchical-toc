@@ -1,6 +1,6 @@
 import { TAbstractFile, Plugin, TFile } from 'obsidian';
 import { WorkspaceLeaf } from "obsidian";
-import { data, active_id } from './components/stores';
+import { data, active_id, centered_id, centered_children, show_child_count } from './components/stores';
 import { NoteData } from './data';
 import { BaseScanner } from 'base_scanner';
 import { VF_SelectFile } from './select_file_modal';
@@ -15,7 +15,7 @@ export default class VirtFolderPlugin extends Plugin
 	base: BaseScanner;
 	yaml: YamlParser;
 	settings: VirtFolderSettings;
-	
+
 	async onload()
 	{
 		await this.loadSettings(); // order is important
@@ -41,7 +41,7 @@ export default class VirtFolderPlugin extends Plugin
 			  this.VF_OpenTreeView();
 			},
 		});
- 
+
 		this.addCommand({
 			id: "add_folder",
 			name: "Add folder",
@@ -78,7 +78,7 @@ export default class VirtFolderPlugin extends Plugin
 			},
 		});
 
-		this.app.workspace.onLayoutReady(() => 
+		this.app.workspace.onLayoutReady(() =>
 		{
 			// reactive
 			this.data.onStartApp();
@@ -103,8 +103,18 @@ export default class VirtFolderPlugin extends Plugin
 	updateActiveFile()
 	{
 		let file = this.app.workspace.getActiveFile();
-		if(file) active_id.set(file.path);
-		else active_id.set('');
+		if(file) {
+			active_id.set(file.path);
+			centered_id.set(file.path);
+			// Get children of the centered note
+			const children = this.base.get_children_for_note(file.path);
+			centered_children.set(children);
+		}
+		else {
+			active_id.set('');
+			centered_id.set('');
+			centered_children.set([]);
+		}
 	}
 
 	setActiveFile(file: TFile | null)
@@ -112,23 +122,30 @@ export default class VirtFolderPlugin extends Plugin
 		if(file instanceof TFile)
 		{
 			active_id.set(file.path);
+			centered_id.set(file.path);
+			// Get children of the centered note
+			const children = this.base.get_children_for_note(file.path);
+			centered_children.set(children);
 		}else{
 			active_id.set('');
+			centered_id.set('');
+			centered_children.set([]);
 		}
 	}
 
 	update_data()
 	{
 		data.set(this.base);
+		show_child_count.set(this.settings.showChildCount);
 		this.updateActiveFile();
 	}
 
-	onOpenFile = (file: TFile | null) => 
+	onOpenFile = (file: TFile | null) =>
 	{
 		this.setActiveFile(file);
 	};
-	
-	onCreateFile = (file: TAbstractFile) => 
+
+	onCreateFile = (file: TAbstractFile) =>
 	{
 		if(file instanceof TFile)
 		{
@@ -136,7 +153,7 @@ export default class VirtFolderPlugin extends Plugin
 			this.update_data();
 		}
 	};
-	
+
 	onDeleteFile = (file: TAbstractFile) =>
 	{
 		// file can be TFolder or TFile
@@ -146,7 +163,7 @@ export default class VirtFolderPlugin extends Plugin
 			this.update_data();
 		}
 	};
-	
+
 	onRenameFile = (file: TAbstractFile, oldPath: string) =>
 	{
 		if(file instanceof TFile)
@@ -155,12 +172,12 @@ export default class VirtFolderPlugin extends Plugin
 			this.update_data();
 		}
 	};
-	  
+
 	onResolveMetadata = (file: TFile) =>
 	{
 		if (this.base.is_same_mtime(file))
 		{
-			return; 
+			return;
 		}
 
 		this.data.onChange(file);
@@ -179,10 +196,10 @@ export default class VirtFolderPlugin extends Plugin
 	async activateView()
 	{
 		const { workspace } = this.app;
-	
+
 		let leaf: WorkspaceLeaf | null = null;
 		const leaves = workspace.getLeavesOfType(VIEW_TYPE_VF);
-	
+
 		if (leaves.length > 0) {
 		  // A leaf with our view already exists, use that
 		  leaf = leaves[0];
@@ -192,7 +209,7 @@ export default class VirtFolderPlugin extends Plugin
 		  leaf = workspace.getLeftLeaf(false);
 		  if (leaf) await leaf.setViewState({ type: VIEW_TYPE_VF, active: true });
 		}
-	
+
 		// "Reveal" the leaf in case it is in a collapsed sidebar
 		if (leaf) workspace.revealLeaf(leaf);
 	}
@@ -223,7 +240,7 @@ export default class VirtFolderPlugin extends Plugin
 		let file = this.app.workspace.getActiveFile();
 		if(!file) return;
 
-		// 1. select file 
+		// 1. select file
 		new VF_SelectFile(this, (file_id:string) =>
 			{
 				// 2. add to yaml

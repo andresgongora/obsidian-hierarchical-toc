@@ -93,7 +93,7 @@ export class BaseScanner
 
     get_filted_list()
     {
-        return this.app.vault.getMarkdownFiles().filter( (file) => 
+        return this.app.vault.getMarkdownFiles().filter( (file) =>
         {
             for (let filter of this.settings.filter)
             {
@@ -171,7 +171,7 @@ export class BaseScanner
 
             let metadata = this.app.metadataCache.getFileCache(file);
             if (!metadata) continue;
-			
+
             if(metadata.frontmatterLinks)
             {
                 for(let link of metadata.frontmatterLinks)
@@ -195,7 +195,7 @@ export class BaseScanner
                 {
                     let value = metadata.frontmatter["IsPinned"];
                     this.note_list[file_id].is_pinned = (value != "0" && value != "false");
-                }		
+                }
             }
         }
     }
@@ -277,7 +277,7 @@ export class BaseScanner
         if(sortBy == SortTypes.note_title)
         {
             links_copy.sort(
-                (a,b) => 
+                (a,b) =>
                 {
                     a = this.link_to_title(a);
                     b = this.link_to_title(b);
@@ -385,7 +385,7 @@ export class BaseScanner
 
         return path_list;
     }
-    
+
     _get_min_path(path_list: string[][])
     {
         let min_path:string[] = [];
@@ -482,5 +482,14 @@ export class BaseScanner
 
         this.last_active = path.slice();
         return path;
+    }
+
+    get_children_for_note(id: string): string[]
+    {
+        if (id in this.note_list)
+        {
+            return this.note_list[id].children;
+        }
+        return [];
     }
 }

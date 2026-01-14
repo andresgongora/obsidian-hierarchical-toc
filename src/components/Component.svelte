@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Note from "./Note.svelte";
-	import { data } from './stores';
+	import { data, centered_id, centered_children } from './stores';
 
 	const children: Record<string, Note> = {};
 
@@ -13,10 +13,9 @@
 
 </script>
 
-{#if $data !== undefined}
-	<Note type="top_dir" node_path={['top_dir']} bind:this={children['top_dir']} />
-	{#if $data.orphans_list.length}
-	<Note type="orphan_dir" node_path={['orphan_dir']} bind:this={children['orphan_dir']} />
-	{/if}
+{#if $data !== undefined && $centered_children}
+	{#each $centered_children as child (child)}
+		<Note type="sub_note" id="{child}" node_path={[child]} bind:this={children[child]} />
+	{/each}
 {/if}
 

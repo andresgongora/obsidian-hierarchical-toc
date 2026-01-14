@@ -18,9 +18,10 @@ export interface VirtFolderSettings
 	sortTreeBy: SortTypes;
 	sortTreeRev: boolean;
 	UseWikiLinks: boolean;
+	showChildCount: boolean;
 }
 
-export const DEFAULT_SETTINGS: Partial<VirtFolderSettings> = 
+export const DEFAULT_SETTINGS: Partial<VirtFolderSettings> =
 {
 	ignorePath: '',
 	propertyName: 'Folders',
@@ -29,6 +30,7 @@ export const DEFAULT_SETTINGS: Partial<VirtFolderSettings> =
 	sortTreeBy: SortTypes.file_name,
 	sortTreeRev: false,
 	UseWikiLinks: true,
+	showChildCount: true,
 };
 
 export class VirtFolderSettingTab extends PluginSettingTab
@@ -53,7 +55,7 @@ export class VirtFolderSettingTab extends PluginSettingTab
 	{
 		let { containerEl } = this;
 		containerEl.empty();
-	
+
 		// validate on change !!
 
 		new Setting(containerEl)
@@ -62,7 +64,7 @@ export class VirtFolderSettingTab extends PluginSettingTab
 		.addText((text: TextComponent) =>
 		{
 			text.setValue(this.plugin.settings.propertyName);
-			text.setPlaceholder('Folders')
+			text.setPlaceholder('up')
 			text.onChange(async (value) =>
 			{
 				let style = text.inputEl.style;
@@ -135,7 +137,7 @@ export class VirtFolderSettingTab extends PluginSettingTab
 			}
 
 			dc.setValue(this.plugin.settings.sortTreeBy);
-			
+
 			dc.onChange(async (value) =>
 			{
 				this.plugin.settings.sortTreeBy = SortTypes[value as keyof typeof SortTypes];
@@ -143,7 +145,7 @@ export class VirtFolderSettingTab extends PluginSettingTab
 				this.update_note_list();
 			});
 		});
-		
+
 
 		new Setting(containerEl)
 		.setName("Reverse sort order")
@@ -158,7 +160,7 @@ export class VirtFolderSettingTab extends PluginSettingTab
 			});
 		});
 
-		
+
 		new Setting(containerEl)
 		.setName("List of ignored paths")
 		.setDesc("Each line is interpreted as the start of an ignored path")
@@ -205,7 +207,22 @@ export class VirtFolderSettingTab extends PluginSettingTab
 				this.update_note_list();
 			});
 		});
-		
+
+
+		new Setting(containerEl)
+		.setName("Show child count in tree")
+		.setDesc("Display the number of children next to each tree node")
+		.addToggle( (tg:ToggleComponent) =>
+		{
+			tg.setValue(this.plugin.settings.showChildCount);
+			tg.onChange(async (value) =>
+			{
+				this.plugin.settings.showChildCount = value;
+				await this.plugin.saveSettings();
+				this.update_show_child_count();
+			});
+		});
+
 	}
 
 	update_counter()
@@ -219,7 +236,7 @@ export class VirtFolderSettingTab extends PluginSettingTab
 		this.plugin.base.rescan();
 		this.plugin.update_data();
 	}
-	
+
 	update_filter(value:string)
 	{
 		let filter = this.parse_text_area(value);
@@ -251,11 +268,16 @@ export class VirtFolderSettingTab extends PluginSettingTab
 
 	update_title(value:string)
 	{
-		if (this.is_empty_str(value) || this.is_valid_prop_name(value))	
+		if (this.is_empty_str(value) || this.is_valid_prop_name(value))
 		{
 			this.plugin.base.settings.set_title(value);
 			this.update_note_list();
 		}
+	}
+
+	update_show_child_count()
+	{
+		this.plugin.update_data();
 	}
 
 	get_css_var(variable:string)
