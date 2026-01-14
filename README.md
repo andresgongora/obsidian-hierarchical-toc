@@ -28,7 +28,8 @@ relationships:
 
 Here's a comprehensive example showing the complete hierarchical structure of a vault. Note that
 **each note may have more than one parent** (notice for eaxmple `F`), creating a flexible knowledge
-graph rather than a strict tree:
+graph rather than a strict tree. Also note that this relationship **is note defined by folder
+structure** but rather by the `parent` field in each note's frontmatter.
 
 ```text
 A
@@ -55,15 +56,6 @@ A
         └── L
             └── N
 ```
-
-In this structure:
-
-- Note **F** has two parents: **B** and **C**
-- Note **G** has two parents: **C** and **D**
-- Note **H** has two parents: **C** and **D**
-- Note **K** has three parents: **F**, **F** (via C), and **G**
-- Note **M** has two parents: **I** and **J**
-- Note **N** appears under multiple paths through **K** and **L**
 
 ### Active Note View
 
