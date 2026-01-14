@@ -1,6 +1,6 @@
 import { TAbstractFile, Plugin, TFile } from 'obsidian';
 import { WorkspaceLeaf } from "obsidian";
-import { data, active_id, centered_id, centered_children, show_child_count } from './components/stores';
+import { data, active_id, centered_id, centered_children, show_child_count, auto_expand_tree } from './components/stores';
 import { NoteData } from './data';
 import { BaseScanner } from 'base_scanner';
 import { VF_SelectFile } from './select_file_modal';
@@ -137,6 +137,7 @@ export default class HierarchicalTocPlugin extends Plugin
 	{
 		data.set(this.base);
 		show_child_count.set(this.settings.showChildCount);
+		auto_expand_tree.set(this.settings.autoExpandTree);
 		this.updateActiveFile();
 	}
 

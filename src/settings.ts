@@ -19,6 +19,7 @@ export interface HierarchicalTocSettings
 	sortTreeRev: boolean;
 	UseWikiLinks: boolean;
 	showChildCount: boolean;
+	autoExpandTree: boolean;
 }
 
 export const DEFAULT_SETTINGS: Partial<HierarchicalTocSettings> =
@@ -31,6 +32,7 @@ export const DEFAULT_SETTINGS: Partial<HierarchicalTocSettings> =
 	sortTreeRev: false,
 	UseWikiLinks: true,
 	showChildCount: true,
+	autoExpandTree: false,
 };
 
 export class HierarchicalTocSettingTab extends PluginSettingTab
@@ -223,6 +225,21 @@ export class HierarchicalTocSettingTab extends PluginSettingTab
 			});
 		});
 
+
+		new Setting(containerEl)
+		.setName("Auto-expand tree")
+		.setDesc("Show fully expanded tree when changing active note")
+		.addToggle( (tg:ToggleComponent) =>
+		{
+			tg.setValue(this.plugin.settings.autoExpandTree);
+			tg.onChange(async (value) =>
+			{
+				this.plugin.settings.autoExpandTree = value;
+				await this.plugin.saveSettings();
+				this.update_auto_expand();
+			});
+		});
+
 	}
 
 	update_counter()
@@ -276,6 +293,11 @@ export class HierarchicalTocSettingTab extends PluginSettingTab
 	}
 
 	update_show_child_count()
+	{
+		this.plugin.update_data();
+	}
+
+	update_auto_expand()
 	{
 		this.plugin.update_data();
 	}

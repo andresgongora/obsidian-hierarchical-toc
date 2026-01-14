@@ -6,7 +6,7 @@
 	export let type = "sub_note"; // or "top_dir" or "orphan_dir" or "centered_note"
 	export let node_path: string[] = []; // set by parents
 
-	import { getPlugin, data, active_id, show_child_count } from "./stores";
+	import { getPlugin, data, active_id, show_child_count, auto_expand_tree } from "./stores";
 	import { slide } from "svelte/transition";
 	import { getIcon } from "obsidian";
 	import { OneNote } from "onenote";
@@ -18,7 +18,7 @@
 	let note: OneNote;
 
 	let title = id;
-	let isCollapsed = true;
+	let isCollapsed = !$auto_expand_tree;
 	let IsOpened = false;
 
     let childCounter = 0;
