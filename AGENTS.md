@@ -114,3 +114,16 @@ Follow Obsidian's **Developer Policies** and **Plugin Guidelines**. In particula
 - Developer policies: https://docs.obsidian.md/Developer+policies
 - Plugin guidelines: https://docs.obsidian.md/Plugins/Releasing/Plugin+guidelines
 - Style guide: https://help.obsidian.md/style-guide
+
+## Release process
+
+```bash
+nix-shell -p nodejs gh
+npm install
+npm run build
+# Remember to update changelog and manifest.json version
+npm version patch
+git push origin master --tags
+version=$(cat manifest.json | jq -r ".version")
+gh release create ${version} -F CHANGELOG.md manifest.json main.js src/styles.css
+```

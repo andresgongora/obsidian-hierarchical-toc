@@ -13,7 +13,6 @@ export interface HierarchicalTocSettings
 {
 	ignorePath: string;
 	propertyName: string;
-	titleProp: string;
 	cmdShowTitle: boolean;
 	sortTreeBy: SortTypes;
 	sortTreeRev: boolean;
@@ -27,7 +26,6 @@ export const DEFAULT_SETTINGS: Partial<HierarchicalTocSettings> =
 {
 	ignorePath: '',
 	propertyName: 'up',
-	titleProp: '',
 	cmdShowTitle: false,
 	sortTreeBy: SortTypes.file_name,
 	sortTreeRev: false,
@@ -52,7 +50,6 @@ export class HierarchicalTocSettingTab extends PluginSettingTab
 	{
 		this.update_filter(this.plugin.settings.ignorePath);
 		this.update_prop_name(this.plugin.settings.propertyName);
-		this.update_title(this.plugin.settings.titleProp);
 	}
 
 	display(): void
@@ -81,34 +78,6 @@ export class HierarchicalTocSettingTab extends PluginSettingTab
 					await this.plugin.saveSettings();
 
 					this.update_prop_name(value);
-				}else{
-					style.borderColor = this.get_css_var('--background-modifier-error');
-				}
-			});
-		});
-
-
-		// can be empty !!!
-
-		new Setting(containerEl)
-		.setName("YAML for note's title")
-		.setDesc("Leave the field blank to take the title from the file name")
-		.addText((text: TextComponent) =>
-		{
-			text.setValue(this.plugin.settings.titleProp);
-			text.setPlaceholder('Title')
-			text.onChange(async (value) =>
-			{
-				let style = text.inputEl.style;
-
-				if(this.is_empty_str(value) || this.is_valid_prop_name(value))
-				{
-					style.borderColor = '';
-
-					this.plugin.settings.titleProp = value;
-					await this.plugin.saveSettings();
-
-					this.update_title(value);
 				}else{
 					style.borderColor = this.get_css_var('--background-modifier-error');
 				}
@@ -310,15 +279,6 @@ export class HierarchicalTocSettingTab extends PluginSettingTab
 		if (!this.is_valid_prop_name(name))	return;
 		this.plugin.base.settings.set_prop(name);
 		this.update_note_list();
-	}
-
-	update_title(value:string)
-	{
-		if (this.is_empty_str(value) || this.is_valid_prop_name(value))
-		{
-			this.plugin.base.settings.set_title(value);
-			this.update_note_list();
-		}
 	}
 
 	update_show_child_count()
