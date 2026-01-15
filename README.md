@@ -12,6 +12,28 @@ vault's hierarchical structure, this plugin is modified to serve as a **Table of
 the currently active note**. It displays only the child notes of the active note, not the entire
 vault hierarchy.
 
+## Installation
+
+### Using BRAT (Recommended for Beta Testing)
+
+The easiest way to install this plugin is using the
+[BRAT](https://github.com/TfTHacker/obsidian42-brat) (Beta Reviewers Auto-update Thingy) plugin:
+
+1. Install BRAT from the Obsidian Community Plugins
+2. Open the command palette and run the command **BRAT: Add a beta plugin for testing**
+3. Enter this repository URL: `https://github.com/andresgongora/obsidian-hierarchical-toc`
+4. Enable the plugin in Settings → Community Plugins
+
+BRAT will automatically keep the plugin updated with the latest changes from the repository.
+
+### Manual Installation
+
+1. Download the latest release from the [GitHub releases
+   page](https://github.com/andresgongora/obsidian-hierarchical-toc/releases)
+2. Extract the files to your vault's plugins folder: `<vault>/.obsidian/plugins/hierarchical-toc/`
+3. Reload Obsidian
+4. Enable the plugin in Settings → Community Plugins
+
 ## How It Works
 
 The plugin shows a tree view in the sidebar that displays notes linked by parent-child
