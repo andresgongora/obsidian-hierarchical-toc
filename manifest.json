@@ -1,10 +1,9 @@
 {
 	"id": "hierarchical-toc",
 	"name": "Hierarchical TOC",
-	"version": "1.0.0",
+	"version": "0.0.2",
 	"minAppVersion": "0.15.0",
 	"description": "Displays child notes of the active note in a hierarchical tree view (fork of Virtual Folder)",
-
 	"author": "andresgongora",
 	"authorUrl": "https://github.com/andresgongora",
 	"isDesktopOnly": false
