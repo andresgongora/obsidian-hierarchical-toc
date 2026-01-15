@@ -123,7 +123,7 @@ npm install
 npm run build
 # Remember to update changelog and manifest.json version
 npm version patch
-git push origin master --tags
+git push --tags
 version=$(cat manifest.json | jq -r ".version")
 gh release create ${version} -F CHANGELOG.md manifest.json main.js src/styles.css
 ```
