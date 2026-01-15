@@ -87,10 +87,9 @@ export class VF_SelectPropModal  extends SuggestModal<NoteLink>
         return notes;
     }
 
-    getItemName(item: NoteLink)
+	getItemName(item: NoteLink)
 	{
-		if(!this.plugin.settings.cmdShowTitle) return item.name;
-        return this.plugin.base.link_to_title(item.name);
+		return item.name;
 	}
 
     renderSuggestion(item: NoteLink, el: HTMLElement)

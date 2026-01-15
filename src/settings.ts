@@ -13,7 +13,6 @@ export interface HierarchicalTocSettings
 {
 	ignorePath: string;
 	propertyName: string;
-	cmdShowTitle: boolean;
 	sortTreeBy: SortTypes;
 	sortTreeRev: boolean;
 	UseWikiLinks: boolean;
@@ -26,7 +25,6 @@ export const DEFAULT_SETTINGS: Partial<HierarchicalTocSettings> =
 {
 	ignorePath: '',
 	propertyName: 'up',
-	cmdShowTitle: false,
 	sortTreeBy: SortTypes.file_name,
 	sortTreeRev: false,
 	UseWikiLinks: true,
@@ -81,20 +79,6 @@ export class HierarchicalTocSettingTab extends PluginSettingTab
 				}else{
 					style.borderColor = this.get_css_var('--background-modifier-error');
 				}
-			});
-		});
-
-
-		new Setting(containerEl)
-		.setName("Use title in commands")
-		.setDesc("Display note's title instead of file name when displaying command results")
-		.addToggle( (tg:ToggleComponent) =>
-		{
-			tg.setValue(this.plugin.settings.cmdShowTitle);
-			tg.onChange(async (value) =>
-			{
-				this.plugin.settings.cmdShowTitle = value;
-				await this.plugin.saveSettings();
 			});
 		});
 
