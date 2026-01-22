@@ -3,6 +3,7 @@
 ## [1.0.3]
 
 - Update License dates.
+- Update dependencies.
 
 ## [1.0.2]
 

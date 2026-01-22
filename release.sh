@@ -1,6 +1,8 @@
 #!/bin/env bash
 set -e
 set -o pipefail
+gh --version
+npm install
 npm run build
 npm version patch
 # npm run release
