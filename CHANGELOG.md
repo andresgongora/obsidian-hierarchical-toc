@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## [1.0.3]
+
+- Update License dates.
+
 ## [1.0.2]
 
 - Remove vestigial settings.
