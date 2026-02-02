@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## [1.0.4]
+
+- Update description in manifest.json.
+
 ## [1.0.3]
 
 - Update License dates.
