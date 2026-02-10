@@ -1,4 +1,3 @@
-import { App, TFile } from 'obsidian';
 import { BaseScanner } from 'base_scanner';
 
 export class NoteData
@@ -13,23 +12,23 @@ export class NoteData
         this.base.rescan();
     }
 
-    onCreate(file: TFile)
+    onCreate()
     {
         this.base.rescan();
     }
 
-    onChange(file:TFile)
+    onChange()
     {
-        this.base.rescan();      
+        this.base.rescan();
     }
 
-    onRename(file:TFile, oldPath:string)
+    onRename()
     {
-        this.base.rescan();      
+        this.base.rescan();
     }
 
-    onDelete(file: TFile)
+    onDelete()
     {
-        this.base.rescan();      
+        this.base.rescan();
     }
 }

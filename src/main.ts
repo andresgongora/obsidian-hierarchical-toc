@@ -3,8 +3,6 @@ import { WorkspaceLeaf } from "obsidian";
 import { data, active_id, centered_id, centered_children, show_child_count, auto_expand_tree, auto_expand_depth } from './components/stores';
 import { NoteData } from './data';
 import { BaseScanner } from 'base_scanner';
-import { VF_SelectFile } from './select_file_modal';
-import { VF_SelectPropModal  } from './select_prop_modal';
 import { VIEW_TYPE_VF, HierarchicalTocView as HierarchicalTocView } from 'tree_view';
 import { YamlParser } from 'yaml_parser';
 import { HierarchicalTocSettingTab, HierarchicalTocSettings, DEFAULT_SETTINGS } from 'settings';
@@ -66,7 +64,7 @@ export default class HierarchicalTocPlugin extends Plugin
 
 	updateActiveFile()
 	{
-		let file = this.app.workspace.getActiveFile();
+		const file = this.app.workspace.getActiveFile();
 		if(file) {
 			active_id.set(file.path);
 			centered_id.set(file.path);
@@ -115,7 +113,7 @@ export default class HierarchicalTocPlugin extends Plugin
 	{
 		if(file instanceof TFile)
 		{
-			this.data.onCreate(file);
+			this.data.onCreate();
 			this.update_data();
 		}
 	};
@@ -125,16 +123,16 @@ export default class HierarchicalTocPlugin extends Plugin
 		// file can be TFolder or TFile
 		if(file instanceof TFile)
 		{
-			this.data.onDelete(file);
+			this.data.onDelete();
 			this.update_data();
 		}
 	};
 
-	onRenameFile = (file: TAbstractFile, oldPath: string) =>
+	onRenameFile = (file: TAbstractFile, _oldPath: string) =>
 	{
 		if(file instanceof TFile)
 		{
-			this.data.onRename(file, oldPath);
+			this.data.onRename();
 			this.update_data();
 		}
 	};
@@ -146,7 +144,7 @@ export default class HierarchicalTocPlugin extends Plugin
 			return;
 		}
 
-		this.data.onChange(file);
+		this.data.onChange();
 		this.update_data();
 	};
 

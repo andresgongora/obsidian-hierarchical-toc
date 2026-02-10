@@ -3,7 +3,7 @@ import { OneNote } from 'onenote';
 import  HierarchicalTocPlugin  from 'main';
 import { SortTypes } from 'settings';
 
-function _is_string(value:any)
+function _is_string(value: unknown)
 {
     return typeof value === 'string';
 }
@@ -11,7 +11,7 @@ function _is_string(value:any)
 class ScanSettings
 {
 	filter: string[] = [];
-	title: string = '';
+	title = '';
     prop_regexp?:RegExp = undefined;
 
     set_filter(filter: string[])
@@ -26,7 +26,7 @@ class ScanSettings
 
     set_prop(prop: string)
     {
-		let regexp_str = `^${prop}(\\.\\d+){0,1}$`;
+		const regexp_str = `^${prop}(\\.\\d+){0,1}$`;
 		this.prop_regexp = new RegExp(regexp_str);
     }
 
@@ -54,16 +54,16 @@ export class BaseScanner
         return this.settings.prop_regexp.test(prop_name.trim());
     }
 
-    restore_utime(old_list: any)
+    restore_utime(old_list: {[id: string]: {utime: number}})
     {
-		for (let id in old_list)
+		for (const id in old_list)
 		{
             // how about renamed file ?
 
             if (id in this.note_list)
             {
-                let new_ut = this.note_list[id].utime;
-                let old_ut = old_list[id].utime;
+                const new_ut = this.note_list[id].utime;
+                const old_ut = old_list[id].utime;
 
                 if (old_ut > new_ut)
                 {
@@ -77,7 +77,7 @@ export class BaseScanner
     {
         if(!this.settings.is_valid()) return;
 
-        let old_list = this.note_list;
+        const old_list = this.note_list;
         this.init_note_list();
         this.build_links();
         this.build_top();
@@ -94,7 +94,7 @@ export class BaseScanner
     {
         return this.app.vault.getMarkdownFiles().filter( (file) =>
         {
-            for (let filter of this.settings.filter)
+            for (const filter of this.settings.filter)
             {
                 if (file.path.startsWith(filter)) return false;
             }
@@ -105,13 +105,13 @@ export class BaseScanner
 
     get_meta_value(file:TFile, prop:string)
     {
-        let metadata = this.app.metadataCache.getFileCache(file);
+        const metadata = this.app.metadataCache.getFileCache(file);
 
         if(metadata && metadata.frontmatter)
         {
             if(prop in metadata.frontmatter)
             {
-                let value = metadata.frontmatter[prop];
+                const value = metadata.frontmatter[prop];
                 return _is_string(value) ? value : null;
             }
         }
@@ -121,28 +121,28 @@ export class BaseScanner
 
     get_note_title(file:TFile)
     {
-        let name = file.basename;
-        let title = this.get_meta_value(file, this.settings.title);
+        const name = file.basename;
+        const title = this.get_meta_value(file, this.settings.title);
         return title ? title : name;
     }
 
     link_to_title(value:string)
     {
-        let link_file = this.app.metadataCache.getFirstLinkpathDest(value, '');
+        const link_file = this.app.metadataCache.getFirstLinkpathDest(value, '');
         if(!link_file) return value;
         return this.get_note_title(link_file);
     }
 
     link_to_ctime(value:string)
     {
-        let link_file = this.app.metadataCache.getFirstLinkpathDest(value, '');
+        const link_file = this.app.metadataCache.getFirstLinkpathDest(value, '');
         if(!link_file) return 0;
         return link_file.stat.ctime;
     }
 
     link_to_mtime(value:string)
     {
-        let link_file = this.app.metadataCache.getFirstLinkpathDest(value, '');
+        const link_file = this.app.metadataCache.getFirstLinkpathDest(value, '');
         if(!link_file) return 0;
         return link_file.stat.mtime;
     }
@@ -152,9 +152,9 @@ export class BaseScanner
         this.note_list = {}
 
         // create empty notes
-        for (let file of this.get_filted_list())
+        for (const file of this.get_filted_list())
         {
-            let file_id = file.path
+            const file_id = file.path
             this.note_list[file_id] = new OneNote(
                 file_id, file.stat.mtime, file.stat.ctime,
                 file.basename, this.get_note_title(file)
@@ -164,23 +164,23 @@ export class BaseScanner
 
     build_links()
     {
-        for (let file of this.get_filted_list())
+        for (const file of this.get_filted_list())
         {
-            let file_id = file.path
+            const file_id = file.path
 
-            let metadata = this.app.metadataCache.getFileCache(file);
+            const metadata = this.app.metadataCache.getFileCache(file);
             if (!metadata) continue;
 
             if(metadata.frontmatterLinks)
             {
-                for(let link of metadata.frontmatterLinks)
+                for(const link of metadata.frontmatterLinks)
 				{
                     if (!this.test_prop_name(link.key)) continue;
 
-                    let link_file = this.app.metadataCache.getFirstLinkpathDest(link.link, '');
+                    const link_file = this.app.metadataCache.getFirstLinkpathDest(link.link, '');
                     if(!link_file) continue;
 
-                    let link_id = link_file.path;
+                    const link_id = link_file.path;
                     if(!(link_id in this.note_list)) continue;
 
                     this.note_list[file_id].parents.push(link_id);
@@ -192,7 +192,7 @@ export class BaseScanner
             {
                 if("IsPinned" in metadata.frontmatter)
                 {
-                    let value = metadata.frontmatter["IsPinned"];
+                    const value = metadata.frontmatter["IsPinned"];
                     this.note_list[file_id].is_pinned = (value != "0" && value != "false");
                 }
             }
@@ -208,9 +208,9 @@ export class BaseScanner
     {
         this.top_list = [];
 
-        for(let i in this.note_list)
+        for(const i in this.note_list)
         {
-            let note = this.note_list[i];
+            const note = this.note_list[i];
 
             if(this.is_top(note))
             {
@@ -221,14 +221,14 @@ export class BaseScanner
 
     old_l_sort(links: string[])
 	{
-		let pinned = [];
-		let normal = [];
+		const pinned = [];
+		const normal = [];
 
 		// cut array into pinned and normal items
 
-		for(let id of links)
+		for(const id of links)
 		{
-            let note = this.note_list[id];
+            const note = this.note_list[id];
 
         	if(note.is_pinned)
 			{
@@ -247,9 +247,9 @@ export class BaseScanner
 
     l_sort(links: string[])
 	{
-        let links_copy: string[] = [...links];
-        let sortBy: SortTypes = this.plugin.settings.sortTreeBy;
-        let sortRev: boolean = this.plugin.settings.sortTreeRev;
+        const links_copy: string[] = [...links];
+        const sortBy: SortTypes = this.plugin.settings.sortTreeBy;
+        const sortRev: boolean = this.plugin.settings.sortTreeRev;
 
         if(sortBy == SortTypes.file_name)
         {
@@ -291,9 +291,9 @@ export class BaseScanner
 
     sort_links()
     {
-        for (let id in this.note_list)
+        for (const id in this.note_list)
         {
-            let note = this.note_list[id];
+            const note = this.note_list[id];
             note.children = this.l_sort(note.children);
         }
 
@@ -310,8 +310,8 @@ export class BaseScanner
 
     is_same_mtime(file:TFile)
     {
-        let id = file.path;
-        let note = this.note_by_id(id);
+        const id = file.path;
+        const note = this.note_by_id(id);
         if(!note) return false;
         return note.mtime == file.stat.mtime;
     }
@@ -334,27 +334,27 @@ export class BaseScanner
         // down-to-top, search from last to root
         if(this.is_top(note))
         {
-            let new_path = ['top_dir'].concat(path);
+            const new_path = ['top_dir'].concat(path);
             path_list.push(new_path);
             return;
         }
 
-        for(let parent of note.parents)
+        for(const parent of note.parents)
         {
-            let sub_note = this.note_by_id(parent);
+            const sub_note = this.note_by_id(parent);
             if(!sub_note) continue;
 
-            let new_path = [sub_note.id].concat(path);
+            const new_path = [sub_note.id].concat(path);
             this._build_path(sub_note, new_path, path_list);
         }
     }
 
     build_path_list(id: string)
     {
-        let note = this.note_by_id(id);
+        const note = this.note_by_id(id);
         if(!note) return undefined;
 
-        let path_list: string[][] = [];
+        const path_list: string[][] = [];
         this._build_path(note, [note.id], path_list);
 
         return path_list;
@@ -365,9 +365,9 @@ export class BaseScanner
         let min_path:string[] = [];
         let min_count = 999;
 
-        for(let path of path_list)
+        for(const path of path_list)
         {
-            let len = path.length;
+            const len = path.length;
 
             if(len < min_count)
             {
@@ -381,17 +381,17 @@ export class BaseScanner
 
     get_shortest_path(id: string)
     {
-        let path_list = this.build_path_list(id);;
+        const path_list = this.build_path_list(id);;
         if(!path_list) return undefined;
-        let path = this._get_min_path(path_list);
+        const path = this._get_min_path(path_list);
         return path;
     }
 
     _array_index(path_list: string[][], old_path: string[])
     {
-        for(let i in path_list)
+        for(const i in path_list)
         {
-            let path = path_list[i];
+            const path = path_list[i];
 
             if(path.join('/') == old_path.join('/'))
             {
@@ -407,11 +407,11 @@ export class BaseScanner
 
     _split_into_parents(path_list: string[][])
     {
-        let parent_list: {[id: string]: string[][];} = {};
+        const parent_list: {[id: string]: string[][];} = {};
 
-        for(let path of path_list)
+        for(const path of path_list)
         {
-            let parent:string = path[path.length-2];
+            const parent:string = path[path.length-2];
             if (!(parent in parent_list)) parent_list[parent] = [];
             parent_list[parent].push(path);
         }
@@ -421,12 +421,12 @@ export class BaseScanner
 
     _get_shoretest_list(path_list: string[][])
     {
-        let parent_list = this._split_into_parents(path_list);
-        let shortest_list = [];
+        const parent_list = this._split_into_parents(path_list);
+        const shortest_list = [];
 
-        for (let parent in parent_list)
+        for (const parent in parent_list)
         {
-            let path_parent = parent_list[parent];
+            const path_parent = parent_list[parent];
             shortest_list.push(this._get_min_path(path_parent));
         }
 
@@ -441,7 +441,7 @@ export class BaseScanner
         // remove similar, save shortest
         path_list = this._get_shoretest_list(path_list);
 
-        let old_index = this._array_index(path_list, this.last_active);
+        const old_index = this._array_index(path_list, this.last_active);
         let path = undefined;
 
         if(old_index === undefined)
@@ -450,7 +450,7 @@ export class BaseScanner
         }
         else
         {
-            let next_index = this._next_index(path_list.length, old_index);
+            const next_index = this._next_index(path_list.length, old_index);
             path = path_list[next_index];
         }
 

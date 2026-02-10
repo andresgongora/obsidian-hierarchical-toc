@@ -1,4 +1,4 @@
-import { App, Notice, TFile } from 'obsidian';
+import { App, Notice} from 'obsidian';
 import  HierarchicalTocPlugin  from 'main';
 
 export class YamlParser
@@ -13,12 +13,12 @@ export class YamlParser
 		new Notice(msg);
 	}
 
-    _fm_add_link(front:any, selected: string, prop: string)
+    _fm_add_link(front: Record<string, string[]>, selected: string, prop: string)
     {
-        let file = this.app.vault.getFileByPath(selected);
+        const file = this.app.vault.getFileByPath(selected);
         if(!file) return;
 
-        let link = this.app.metadataCache.fileToLinktext(file, '');
+        const link = this.app.metadataCache.fileToLinktext(file, '');
         let formated_link = `[[${link}]]`;
 
         if(!this.plugin.settings.UseWikiLinks)
@@ -47,17 +47,17 @@ export class YamlParser
 
     add_link(yamlProp:string, file_id:string)
     {
-        let file = this.app.workspace.getActiveFile();
+        const file = this.app.workspace.getActiveFile();
         if(!file) return;
         this.app.fileManager.processFrontMatter(file, (fm) => { this._fm_add_link(fm, file_id, yamlProp); });
     }
 
-    _fm_replace_link(front:any, selected: string, prop: string, old_link:string)
+    _fm_replace_link(front: Record<string, string[]>, selected: string, prop: string, old_link:string)
     {
-        let file = this.app.vault.getFileByPath(selected);
+        const file = this.app.vault.getFileByPath(selected);
         if(!file) return;
 
-        let link = this.app.metadataCache.fileToLinktext(file, '');
+        const link = this.app.metadataCache.fileToLinktext(file, '');
         let formated_link = `[[${link}]]`;
 
         if(!this.plugin.settings.UseWikiLinks)
@@ -79,7 +79,7 @@ export class YamlParser
                 return;
             }
 
-            let i = front[prop].indexOf(old_link);
+            const i = front[prop].indexOf(old_link);
             front[prop][i] = formated_link;
             this.showMessage(`Set ${prop}: ${link}`);
         }
@@ -91,12 +91,12 @@ export class YamlParser
 
     replace_link(yamlProp:string, old_link:string, file_id:string)
     {
-        let file = this.app.workspace.getActiveFile();
+        const file = this.app.workspace.getActiveFile();
         if(!file) return;
         this.app.fileManager.processFrontMatter(file, (fm) => { this._fm_replace_link(fm, file_id, yamlProp, old_link); });
     }
 
-    _fm_get_links(front:any, prop: string)
+    _fm_get_links(front: Record<string, string[]>, prop: string)
     {
         if (prop in front && front[prop])
         {
@@ -110,12 +110,12 @@ export class YamlParser
 
     get_links(yamlProp:string, callback: (result: string[]) => void)
     {
-        let file = this.app.workspace.getActiveFile();
+        const file = this.app.workspace.getActiveFile();
         if(!file) return;
         this.app.fileManager.processFrontMatter(file, (fm) => { callback(this._fm_get_links(fm, yamlProp)); });
     }
 
-    _fm_remove_link(front:any, prop: string, old_link:string)
+    _fm_remove_link(front: Record<string, string[]>, prop: string, old_link:string)
     {
         if (prop in front && front[prop])
         {
@@ -133,7 +133,7 @@ export class YamlParser
 
     remove_link(yamlProp:string, old_link:string)
     {
-        let file = this.app.workspace.getActiveFile();
+        const file = this.app.workspace.getActiveFile();
         if(!file) return;
         this.app.fileManager.processFrontMatter(file, (fm) => { this._fm_remove_link(fm, yamlProp, old_link); });
     }

@@ -3,6 +3,7 @@ set -e
 set -o pipefail
 gh --version
 npm install
+npm run lint
 npm run build
 npm version patch
 # npm run release

@@ -1,6 +1,4 @@
-import { App, SuggestModal, Notice } from 'obsidian';
-import { BaseScanner } from 'base_scanner';
-import { YamlParser } from 'yaml_parser';
+import { SuggestModal, Notice } from 'obsidian';
 import  HierarchicalTocPlugin  from 'main';
 
 function get_link_base(link:string)
@@ -11,9 +9,9 @@ function get_link_base(link:string)
         [name](link3)
     */
 
-    let regexp_1 = /(?:\[\[(.+?)\||\[\[(.+?)\]\]|\[.+?\]\((.+?)\))/;
+    const regexp_1 = /(?:\[\[(.+?)\||\[\[(.+?)\]\]|\[.+?\]\((.+?)\))/;
     let result = null;
-    let match = regexp_1.exec(link);
+    const match = regexp_1.exec(link);
 
     if (match)
     {
@@ -40,7 +38,7 @@ export class VF_SelectPropModal  extends SuggestModal<NoteLink>
 	{
 		super(plugin.app);
         this.app = plugin.app;
-		this.useMarkdownLinks = ((this.app.vault as any).getConfig('useMarkdownLinks'));
+		this.useMarkdownLinks = ((this.app.vault as unknown as {getConfig: (key: string) => boolean}).getConfig('useMarkdownLinks'));
 		this.setPlaceholder('Select one to remove');
 	}
 
@@ -67,18 +65,18 @@ export class VF_SelectPropModal  extends SuggestModal<NoteLink>
 		});
     }
 
-    async getSuggestions(query: string): Promise<NoteLink[]>
+    async getSuggestions(_query: string): Promise<NoteLink[]>
     {
-		let notes: NoteLink[] = [];
-        let file = this.app.workspace.getActiveFile();
+		const notes: NoteLink[] = [];
+        const file = this.app.workspace.getActiveFile();
 
 		if(file)
 		{
 			await this.app.fileManager.processFrontMatter(file, (fm) => {this._get_prop_list(fm, this.yamlProp); });
 
-            for(let item of this.prop_list)
+            for(const item of this.prop_list)
             {
-                let name = get_link_base(item);
+                const name = get_link_base(item);
                 if (!name) continue;
                 notes.push({name:name, full:item})
             }
@@ -97,12 +95,12 @@ export class VF_SelectPropModal  extends SuggestModal<NoteLink>
         el.createEl('div', {text: this.getItemName(item)});
     }
 
-    onChooseSuggestion(item: NoteLink, evt: MouseEvent | KeyboardEvent)
+    onChooseSuggestion(item: NoteLink, _evt: MouseEvent | KeyboardEvent)
     {
         this.onSubmit(item.full);
     }
 
-	_get_prop_list(front:any, prop: string)
+	_get_prop_list(front: Record<string, string[]>, prop: string)
 	{
 		if (prop in front && front[prop])
 		{

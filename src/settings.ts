@@ -52,7 +52,7 @@ export class HierarchicalTocSettingTab extends PluginSettingTab
 
 	display(): void
 	{
-		let { containerEl } = this;
+		const { containerEl } = this;
 		containerEl.empty();
 
 		// validate on change !!
@@ -66,7 +66,7 @@ export class HierarchicalTocSettingTab extends PluginSettingTab
 			text.setPlaceholder('up')
 			text.onChange(async (value) =>
 			{
-				let style = text.inputEl.style;
+				const style = text.inputEl.style;
 
 				if(this.is_valid_prop_name(value))
 				{
@@ -88,7 +88,7 @@ export class HierarchicalTocSettingTab extends PluginSettingTab
 		.setDesc("Note sorting criteria in the tree view")
 		.addDropdown( (dc:DropdownComponent) =>
 		{
-			for(let key of Object.keys(SortTypes))
+			for(const key of Object.keys(SortTypes))
 			{
 				dc.addOption(key, key);
 			}
@@ -205,7 +205,7 @@ export class HierarchicalTocSettingTab extends PluginSettingTab
 			text.setPlaceholder('0')
 			text.onChange(async (value) =>
 			{
-				let style = text.inputEl.style;
+				const style = text.inputEl.style;
 				const numValue = parseInt(value);
 
 				if(!isNaN(numValue) && numValue >= 0)
@@ -226,7 +226,7 @@ export class HierarchicalTocSettingTab extends PluginSettingTab
 
 	update_counter()
 	{
-		let count = this.plugin.base.get_filtred_count();
+		const count = this.plugin.base.get_filtred_count();
 		this.counter.setValue(count.toString());
 	}
 
@@ -238,7 +238,7 @@ export class HierarchicalTocSettingTab extends PluginSettingTab
 
 	update_filter(value:string)
 	{
-		let filter = this.parse_text_area(value);
+		const filter = this.parse_text_area(value);
 		this.plugin.base.settings.set_filter(filter);
 	}
 
@@ -254,7 +254,7 @@ export class HierarchicalTocSettingTab extends PluginSettingTab
 
 	is_valid_prop_name(name:string): boolean
 	{
-		let regexp = /^[\w.-]+$/;
+		const regexp = /^[\w.-]+$/;
 		return regexp.test(name);
 	}
 
@@ -277,10 +277,10 @@ export class HierarchicalTocSettingTab extends PluginSettingTab
 
 	get_css_var(variable:string)
 	{
-		let el = document.querySelector('body');
+		const el = document.querySelector('body');
 		if (!el) return '';
 
-		let style = window.getComputedStyle(el);
+		const style = window.getComputedStyle(el);
 		if (!style) return '';
 
 		return style.getPropertyValue(variable);

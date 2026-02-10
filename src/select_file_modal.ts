@@ -1,4 +1,4 @@
-import { App, FuzzySuggestModal, Notice, FuzzyMatch } from 'obsidian';
+import { FuzzySuggestModal, FuzzyMatch } from 'obsidian';
 import { OneNote } from 'onenote';
 import  HierarchicalTocPlugin  from 'main';
 
@@ -13,7 +13,7 @@ interface ShowedItem
 
 export class VF_SelectFile extends FuzzySuggestModal<ShowedItem>
 {
-	selected: string = '';
+	selected = '';
 
 	constructor(private plugin: HierarchicalTocPlugin, private onSubmit: (result: string) => void)
 	{
@@ -21,7 +21,7 @@ export class VF_SelectFile extends FuzzySuggestModal<ShowedItem>
 		this.setPlaceholder('Type note\'s title');
 	}
 
-	getAliases(note: OneNote)
+	getAliases(_note: OneNote)
 	{
 		// next time
 	}
@@ -38,9 +38,9 @@ export class VF_SelectFile extends FuzzySuggestModal<ShowedItem>
 
 	getItems(): ShowedItem[]
 	{
-		let notes: ShowedItem[] = [];
+		const notes: ShowedItem[] = [];
 
-		for (let id in this.plugin.base.note_list)
+		for (const id in this.plugin.base.note_list)
 		{
 			notes.push(this.plugin.base.note_list[id]);
 		}
@@ -50,18 +50,18 @@ export class VF_SelectFile extends FuzzySuggestModal<ShowedItem>
 		return notes;
 	}
 
-	onChooseItem(item: ShowedItem, evt: MouseEvent | KeyboardEvent): void
+	onChooseItem(item: ShowedItem, _evt: MouseEvent | KeyboardEvent): void
 	{
 		this.onSubmit(item.id);
 	}
 
 	_format_parents(parents: string[])
 	{
-		let links = [];
+		const links = [];
 
-		for (let id of parents)
+		for (const id of parents)
 		{
-			let note = this.plugin.base.note_by_id(id);
+			const note = this.plugin.base.note_by_id(id);
 			if(!note) continue;
 			links.push(this.getItemName(note));
 		}
@@ -72,15 +72,16 @@ export class VF_SelectFile extends FuzzySuggestModal<ShowedItem>
 	renderSuggestion(item: FuzzyMatch<ShowedItem>, el: HTMLElement): void
 	{
 		el.createEl('div', {text: this.getItemName(item.item)});
-        let small = el.createEl('small', {cls: 'vf_search_parents'});
+        const small = el.createEl('small', {cls: 'vf_search_parents'});
 
-        for(let parent of item.item.parents)
+        for(const parent of item.item.parents)
         {
-            let path: any = this.plugin.base.get_shortest_path(parent);
-            let links = this._format_parents(path);
-            let line = small.createEl('div', {cls:'vf_serach_div'});
+            const path: string[] | undefined = this.plugin.base.get_shortest_path(parent);
+            if (!path) continue;
+            const links = this._format_parents(path);
+            const line = small.createEl('div', {cls:'vf_serach_div'});
 
-            for(let id of links)
+            for(const id of links)
             {
                 line.createEl('span', {text: id, cls: 'vf_serach_link'});
             }

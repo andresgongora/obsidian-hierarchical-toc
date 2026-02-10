@@ -5,11 +5,11 @@ export class OneNote
     name: string;
     title: string;
     mtime: number;
-    utime: number = 0; // created or used as folder
+    utime = 0; // created or used as folder
 
     parents: string[] = [];
 	children: string[] = [];
-	is_pinned: boolean = false;
+	is_pinned = false;
 
     
     constructor(id: string, mtime: number, ctime: number, name:string, title:string)
