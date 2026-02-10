@@ -175,12 +175,12 @@ export default class HierarchicalTocPlugin extends Plugin
 		}
 
 		// "Reveal" the leaf in case it is in a collapsed sidebar
-		if (leaf) workspace.revealLeaf(leaf);
+		if (leaf) await workspace.revealLeaf(leaf);
 	}
 
-	VF_OpenTreeView()
+	async VF_OpenTreeView()
 	{
-		this.activateView();
+		await this.activateView();
 	}
 
 	updateUsedTime(file_id:string)

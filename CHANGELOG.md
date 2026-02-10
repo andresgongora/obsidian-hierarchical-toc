@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## [1.0.6]
+
+- Lint.
+
 ## [1.0.5]
 
 - Fix counter style.

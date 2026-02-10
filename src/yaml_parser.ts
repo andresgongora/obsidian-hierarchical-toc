@@ -45,11 +45,11 @@ export class YamlParser
         this.showMessage(`Set ${prop}: ${link}`);
     }
 
-    add_link(yamlProp:string, file_id:string)
+    async add_link(yamlProp:string, file_id:string)
     {
         const file = this.app.workspace.getActiveFile();
         if(!file) return;
-        this.app.fileManager.processFrontMatter(file, (fm) => { this._fm_add_link(fm, file_id, yamlProp); });
+        await this.app.fileManager.processFrontMatter(file, (fm) => { this._fm_add_link(fm, file_id, yamlProp); });
     }
 
     _fm_replace_link(front: Record<string, string[]>, selected: string, prop: string, old_link:string)
@@ -89,11 +89,11 @@ export class YamlParser
         }
     }
 
-    replace_link(yamlProp:string, old_link:string, file_id:string)
+    async replace_link(yamlProp:string, old_link:string, file_id:string)
     {
         const file = this.app.workspace.getActiveFile();
         if(!file) return;
-        this.app.fileManager.processFrontMatter(file, (fm) => { this._fm_replace_link(fm, file_id, yamlProp, old_link); });
+        await this.app.fileManager.processFrontMatter(file, (fm) => { this._fm_replace_link(fm, file_id, yamlProp, old_link); });
     }
 
     _fm_get_links(front: Record<string, string[]>, prop: string)
@@ -108,11 +108,11 @@ export class YamlParser
         }
     }
 
-    get_links(yamlProp:string, callback: (result: string[]) => void)
+    async get_links(yamlProp:string, callback: (result: string[]) => void)
     {
         const file = this.app.workspace.getActiveFile();
         if(!file) return;
-        this.app.fileManager.processFrontMatter(file, (fm) => { callback(this._fm_get_links(fm, yamlProp)); });
+        await this.app.fileManager.processFrontMatter(file, (fm) => { callback(this._fm_get_links(fm, yamlProp)); });
     }
 
     _fm_remove_link(front: Record<string, string[]>, prop: string, old_link:string)
@@ -131,11 +131,11 @@ export class YamlParser
         }
     }
 
-    remove_link(yamlProp:string, old_link:string)
+    async remove_link(yamlProp:string, old_link:string)
     {
         const file = this.app.workspace.getActiveFile();
         if(!file) return;
-        this.app.fileManager.processFrontMatter(file, (fm) => { this._fm_remove_link(fm, yamlProp, old_link); });
+        await this.app.fileManager.processFrontMatter(file, (fm) => { this._fm_remove_link(fm, yamlProp, old_link); });
     }
 };
 

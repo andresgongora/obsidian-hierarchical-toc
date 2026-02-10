@@ -20,12 +20,10 @@ export class HierarchicalTocView extends ItemView
 	}
 
 	getDisplayText() {
-        // eslint-disable-next-line @typescript-eslint/naming-convention
-		return "Hierarchical TOC";
+		return "Hierarchical ToC";
 	}
 
-  // Base class requires async signature but implementation has no async operations
-  // eslint-disable-next-line @typescript-eslint/require-await
+  // eslint-disable-next-line @typescript-eslint/require-await -- Base class requires async signature but implementation has no async operations
   async onOpen() {
 	plugin.set(this.plugin);
 
@@ -34,8 +32,7 @@ export class HierarchicalTocView extends ItemView
     });
   }
 
-  // Base class requires async signature but implementation has no async operations
-  // eslint-disable-next-line @typescript-eslint/require-await
+  // eslint-disable-next-line @typescript-eslint/require-await -- Base class requires async signature but implementation has no async operations
   async onClose() {
     this.component.$destroy();
   }

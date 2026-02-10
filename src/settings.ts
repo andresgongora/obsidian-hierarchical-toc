@@ -63,7 +63,6 @@ export class HierarchicalTocSettingTab extends PluginSettingTab
 		.addText((text: TextComponent) =>
 		{
 			text.setValue(this.plugin.settings.propertyName);
-			// eslint-disable-next-line @typescript-eslint/naming-convention
 			text.setPlaceholder('up')
 			text.onChange(async (value) =>
 			{
@@ -154,8 +153,7 @@ export class HierarchicalTocSettingTab extends PluginSettingTab
 
 
 		new Setting(containerEl)
-        // eslint-disable-next-line @typescript-eslint/naming-convention
-		.setName("Use [[WikiLinks]] in YAML")
+		.setName("Use [[wikilinks]] in yaml file")
 		.addToggle( (tg:ToggleComponent) =>
 		{
 			tg.setValue(this.plugin.settings.UseWikiLinks);
