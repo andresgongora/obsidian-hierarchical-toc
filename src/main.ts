@@ -36,7 +36,7 @@ export default class HierarchicalTocPlugin extends Plugin
 			name: "Show tree",
 			icon: "folder-tree",
 			callback: () => {
-			  this.VF_OpenTreeView();
+			  void this.VF_OpenTreeView();
 			},
 		});
 

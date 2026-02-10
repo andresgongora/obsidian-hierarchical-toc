@@ -44,7 +44,7 @@ export class VF_SelectPropModal  extends SuggestModal<NoteLink>
 
     open()
     {
-		this.plugin.yaml.get_links(this.yamlProp, (links)=>
+		void this.plugin.yaml.get_links(this.yamlProp, (links)=>
 		{
             if(links.length == 0)
 			{
