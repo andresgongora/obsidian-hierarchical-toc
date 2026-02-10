@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## [1.0.5]
+
+- Fix counter style.
+- Lint.
+
 ## [1.0.4]
 
 - Update description in manifest.json.
