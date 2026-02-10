@@ -63,8 +63,7 @@ export class HierarchicalTocSettingTab extends PluginSettingTab
 		.addText((text: TextComponent) =>
 		{
 			text.setValue(this.plugin.settings.propertyName);
-			// eslint-disable-next-line obsidianmd/ui/sentence-case -- Placeholder is a literal property name example
-			text.setPlaceholder('up')
+			text.setPlaceholder('Parent')
 			text.onChange(async (value) =>
 			{
 				const style = text.inputEl.style;
@@ -154,8 +153,7 @@ export class HierarchicalTocSettingTab extends PluginSettingTab
 
 
 		new Setting(containerEl)
-		// eslint-disable-next-line obsidianmd/ui/sentence-case -- Contains literal syntax examples
-		.setName("Use [[Wikilinks]] in .yaml file")
+		.setName("Use wikilinks in YAML file")
 		.addToggle( (tg:ToggleComponent) =>
 		{
 			tg.setValue(this.plugin.settings.UseWikiLinks);

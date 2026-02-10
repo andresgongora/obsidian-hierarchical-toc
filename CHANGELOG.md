@@ -1,8 +1,12 @@
 # CHANGELOG
 
+## [1.0.9]
+
+- Undo suppressions.
+
 ## [1.0.8]
 
-- Supress sentence case linting warnings for literal text in UI components.
+- Suppress sentence case linting warnings for literal text in UI components.
 
 ## [1.0.7]
 

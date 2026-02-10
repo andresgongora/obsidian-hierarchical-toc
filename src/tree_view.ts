@@ -20,7 +20,6 @@ export class HierarchicalTocView extends ItemView
 	}
 
 	getDisplayText() {
-		// eslint-disable-next-line obsidianmd/ui/sentence-case -- ToC is an acronym for Table of Contents
 		return "Hierarchical ToC";
 	}
 
