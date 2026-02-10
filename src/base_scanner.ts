@@ -208,10 +208,8 @@ export class BaseScanner
     {
         this.top_list = [];
 
-        for(const i in this.note_list)
+        for(const note of Object.values(this.note_list))
         {
-            const note = this.note_list[i];
-
             if(this.is_top(note))
             {
                 this.top_list.push(note.id);
@@ -389,13 +387,12 @@ export class BaseScanner
 
     _array_index(path_list: string[][], old_path: string[])
     {
-        for(const i in path_list)
+        const old_path_str = old_path.join('/');
+        for(let i = 0; i < path_list.length; i++)
         {
-            const path = path_list[i];
-
-            if(path.join('/') == old_path.join('/'))
+            if(path_list[i].join('/') === old_path_str)
             {
-                return parseInt(i);
+                return i;
             }
         }
     }

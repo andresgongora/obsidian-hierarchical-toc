@@ -63,6 +63,7 @@ export class HierarchicalTocSettingTab extends PluginSettingTab
 		.addText((text: TextComponent) =>
 		{
 			text.setValue(this.plugin.settings.propertyName);
+			// eslint-disable-next-line @typescript-eslint/naming-convention
 			text.setPlaceholder('up')
 			text.onChange(async (value) =>
 			{
@@ -153,6 +154,7 @@ export class HierarchicalTocSettingTab extends PluginSettingTab
 
 
 		new Setting(containerEl)
+        // eslint-disable-next-line @typescript-eslint/naming-convention
 		.setName("Use [[WikiLinks]] in YAML")
 		.addToggle( (tg:ToggleComponent) =>
 		{
@@ -198,7 +200,7 @@ export class HierarchicalTocSettingTab extends PluginSettingTab
 
 		new Setting(containerEl)
 		.setName("Auto-expand depth limit")
-		.setDesc("If auto expand ON, maximum expansion depth (0 = expand all, positive number = limit depth)")
+		.setDesc("Maximum expansion depth when auto-expand is enabled. Use 0 to expand all levels, or a positive number to limit depth.")
 		.addText((text: TextComponent) =>
 		{
 			text.setValue(this.plugin.settings.autoExpandDepth.toString());

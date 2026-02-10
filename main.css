@@ -1,14 +1,1 @@
-/* fakecss:/home/andy/Software/git/obsidian-hierarchical-toc/src/components/Note.esbuild-svelte-fake-css */
-.counter.svelte-to9axs {
-  text-align: right;
-  margin-left: auto;
-  background-color: var(--background-secondary-alt);
-  position: sticky;
-  top: 0;
-  color: var(--text-normal);
-  padding: 2px 4px;
-}
-.current_note.svelte-to9axs {
-  background-color: var(--background-secondary-alt);
-}
-/*# sourceMappingURL=main.css.map */
+.counter.svelte-to9axs{text-align:right;margin-left:auto;background-color:var(--background-secondary-alt);position:sticky;top:0;color:var(--text-normal);padding:2px 4px}.current_note.svelte-to9axs{background-color:var(--background-secondary-alt)}
