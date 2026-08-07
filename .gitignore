@@ -23,9 +23,6 @@ main.css
 # obsidian
 data.json
 
-# Jest coverage output
-coverage/
-
 # Exclude macOS Finder (System Explorer) View States
 .DS_Store
 
