@@ -1,4 +1,4 @@
-import { App, PluginSettingTab, Setting, TextAreaComponent, TextComponent, DropdownComponent, ToggleComponent } from 'obsidian';
+import { App, PluginSettingTab, Setting, TextAreaComponent, TextComponent, DropdownComponent, ToggleComponent, SettingDefinitionItem } from 'obsidian';
 import HierarchicalTocPlugin  from './main';
 
 export enum SortTypes
@@ -42,6 +42,156 @@ export class HierarchicalTocSettingTab extends PluginSettingTab
 		super(app, plugin);
 		this.plugin = plugin;
 		this.init_settings();
+	}
+
+	getSettingDefinitions(): SettingDefinitionItem[] {
+		return [
+			{
+				name: "YAML for note's folders",
+				desc: "The name can contain letters, numbers, minus sign, underscore and dots",
+				render: (setting: Setting) => {
+					setting.addText((text: TextComponent) => {
+						text.setValue(this.plugin.settings.propertyName);
+						text.setPlaceholder('Parent');
+						text.onChange(async (value) => {
+							const style = text.inputEl.style;
+							if (this.is_valid_prop_name(value)) {
+								style.borderColor = '';
+								this.plugin.settings.propertyName = value;
+								await this.plugin.saveSettings();
+								this.update_prop_name(value);
+							} else {
+								style.borderColor = this.get_css_var('--background-modifier-error');
+							}
+						});
+					});
+				},
+			},
+			{
+				name: "Sorting",
+				desc: "Note sorting criteria in the tree view",
+				render: (setting: Setting) => {
+					setting.addDropdown((dc: DropdownComponent) => {
+						for (const key of Object.keys(SortTypes)) {
+							dc.addOption(key, key);
+						}
+						dc.setValue(this.plugin.settings.sortTreeBy);
+						dc.onChange(async (value) => {
+							this.plugin.settings.sortTreeBy = SortTypes[value as keyof typeof SortTypes];
+							await this.plugin.saveSettings();
+							this.update_note_list();
+						});
+					});
+				},
+			},
+			{
+				name: "Reverse sort order",
+				render: (setting: Setting) => {
+					setting.addToggle((tg: ToggleComponent) => {
+						tg.setValue(this.plugin.settings.sortTreeRev);
+						tg.onChange(async (value) => {
+							this.plugin.settings.sortTreeRev = value;
+							await this.plugin.saveSettings();
+							this.update_note_list();
+						});
+					});
+				},
+			},
+			{
+				name: "List of ignored paths",
+				desc: "Each line is interpreted as the start of an ignored path",
+				render: (setting: Setting) => {
+					setting.addTextArea((textArea: TextAreaComponent) => {
+						textArea
+							.setValue(this.plugin.settings.ignorePath)
+							.setPlaceholder('Enter one or more paths relative to the archive root')
+							.onChange(async (value) => {
+								this.plugin.settings.ignorePath = value;
+								await this.plugin.saveSettings();
+								this.update_filter(value);
+								this.update_counter();
+								this.update_note_list();
+							});
+						textArea.inputEl.setAttr("rows", 6);
+						textArea.inputEl.setAttr("cols", 40);
+					});
+				},
+			},
+			{
+				name: "Ignored files",
+				render: (setting: Setting) => {
+					setting.addText((text: TextComponent) => {
+						text.setValue(this.plugin.base.get_filtred_count().toString()).setDisabled(true);
+						this.counter = text;
+					});
+				},
+			},
+			{
+				name: "Use wikilinks in YAML file",
+				render: (setting: Setting) => {
+					setting.addToggle((tg: ToggleComponent) => {
+						tg.setValue(this.plugin.settings.UseWikiLinks);
+						tg.onChange(async (value) => {
+							this.plugin.settings.UseWikiLinks = value;
+							await this.plugin.saveSettings();
+							this.update_note_list();
+						});
+					});
+				},
+			},
+			{
+				name: "Show child count in tree",
+				desc: "Display the number of children next to each tree node",
+				render: (setting: Setting) => {
+					setting.addToggle((tg: ToggleComponent) => {
+						tg.setValue(this.plugin.settings.showChildCount);
+						tg.onChange(async (value) => {
+							this.plugin.settings.showChildCount = value;
+							await this.plugin.saveSettings();
+							this.update_show_child_count();
+						});
+					});
+				},
+			},
+			{
+				name: "Auto-expand tree",
+				desc: "Show fully expanded tree when changing active note",
+				render: (setting: Setting) => {
+					setting.addToggle((tg: ToggleComponent) => {
+						tg.setValue(this.plugin.settings.autoExpandTree);
+						tg.onChange(async (value) => {
+							this.plugin.settings.autoExpandTree = value;
+							await this.plugin.saveSettings();
+							this.update_auto_expand();
+						});
+					});
+				},
+			},
+			{
+				name: "Auto-expand depth limit",
+				desc: "Maximum expansion depth when auto-expand is enabled. Use 0 to expand all levels, or a positive number to limit depth.",
+				render: (setting: Setting) => {
+					setting.addText((text: TextComponent) => {
+						text.setValue(this.plugin.settings.autoExpandDepth.toString());
+						text.setPlaceholder('0');
+						text.onChange(async (value) => {
+							const style = text.inputEl.style;
+							const numValue = parseInt(value);
+							if (!isNaN(numValue) && numValue >= 0) {
+								style.borderColor = '';
+								this.plugin.settings.autoExpandDepth = numValue;
+								await this.plugin.saveSettings();
+								this.update_auto_expand();
+							} else {
+								style.borderColor = this.get_css_var('--background-modifier-error');
+							}
+						});
+						text.inputEl.type = 'number';
+						text.inputEl.min = '0';
+					});
+				},
+			},
+		];
 	}
 
 	init_settings()

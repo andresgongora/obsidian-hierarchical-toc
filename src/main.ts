@@ -13,7 +13,7 @@ export default class HierarchicalTocPlugin extends Plugin
 	base: BaseScanner;
 	yaml: YamlParser;
 	settings: HierarchicalTocSettings;
-	private resolveTimer: ReturnType<typeof setTimeout> | null = null;
+	private resolveTimer: number | null = null;
 
 	async onload()
 	{
@@ -56,7 +56,7 @@ export default class HierarchicalTocPlugin extends Plugin
 
 		this.register(() =>
 		{
-			if(this.resolveTimer !== null) clearTimeout(this.resolveTimer);
+			if(this.resolveTimer !== null) window.clearTimeout(this.resolveTimer);
 		});
 	}
 
@@ -166,10 +166,10 @@ export default class HierarchicalTocPlugin extends Plugin
 		// rescan. Coalesce bursts into a single rescan.
 		if(this.resolveTimer !== null)
 		{
-			clearTimeout(this.resolveTimer);
+			window.clearTimeout(this.resolveTimer);
 		}
 
-		this.resolveTimer = setTimeout(() =>
+		this.resolveTimer = window.setTimeout(() =>
 		{
 			this.resolveTimer = null;
 			this.data.onChange();
