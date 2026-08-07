@@ -1,6 +1,6 @@
 {
 	"name": "hierarchical-toc",
-	"version": "1.0.15",
+	"version": "1.0.16",
 	"description": "Displays child notes of the active note in a hierarchical tree view",
 	"main": "main.js",
 	"scripts": {
