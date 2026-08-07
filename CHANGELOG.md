@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.0.10]
+
 - Fix: `updateUsedTime` no longer throws on missing note id.
 - Fix: rename preserves `utime` (used/created marker) instead of resetting it.
 - Fix: debounce `metadataCache "resolve"` handling to avoid full-graph rescans on large-vault startup.
