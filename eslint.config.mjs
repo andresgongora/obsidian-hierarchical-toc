@@ -1,4 +1,4 @@
-// eslint.config.js
+// eslint.config.mjs
 import tsEslint from "@typescript-eslint/eslint-plugin";
 import tsParser from "@typescript-eslint/parser";
 import obsidianmd from "eslint-plugin-obsidianmd";
