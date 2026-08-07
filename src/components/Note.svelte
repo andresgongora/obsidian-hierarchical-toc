@@ -32,34 +32,37 @@
 	{
 		IsOpened = (id == $active_id);
 
-		if(type == "top_dir")
+		if($data)
 		{
-			title = 'ROOT';
-			childCounter = $data.top_list.length;
-			childList = $data.top_list;
-		}
-
-		if(type == "centered_note")
-		{
-			note = $data.note_list[id];
-
-			if (note)
+			if(type == "top_dir")
 			{
-				title = note.title;
-				childCounter = note.count_children();
-				childList = note.children;
+				title = 'ROOT';
+				childCounter = $data.top_list.length;
+				childList = $data.top_list;
 			}
-		}
 
-		if(type == "sub_note")
-		{
-			note = $data.note_list[id];
-
-			if (note)
+			if(type == "centered_note")
 			{
-				title = note.title;
-				childCounter = note.count_children();
-				childList = note.children;
+				note = $data.note_list[id];
+
+				if (note)
+				{
+					title = note.title;
+					childCounter = note.count_children();
+					childList = note.children;
+				}
+			}
+
+			if(type == "sub_note")
+			{
+				note = $data.note_list[id];
+
+				if (note)
+				{
+					title = note.title;
+					childCounter = note.count_children();
+					childList = note.children;
+				}
 			}
 		}
 	}
@@ -99,7 +102,7 @@
 		let elementRect = myElement.getBoundingClientRect();
 		let absoluteElementTop = elementRect.top + window.scrollY;
 		let middle = absoluteElementTop - (window.innerHeight / 2);
-		myElement.win.scrollTo(0, middle);
+		window.scrollTo(0, middle);
 	}
 
 	export const focusNotes = async (pathNotes: string[]) =>

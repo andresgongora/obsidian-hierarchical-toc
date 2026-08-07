@@ -1,6 +1,6 @@
 import { FuzzySuggestModal, FuzzyMatch } from 'obsidian';
-import { OneNote } from 'onenote';
-import  HierarchicalTocPlugin  from 'main';
+import { OneNote } from './onenote';
+import HierarchicalTocPlugin from './main';
 
 interface ShowedItem
 {

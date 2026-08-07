@@ -8,6 +8,7 @@
 	{
 		let first:string|undefined = pathNotes.shift();
 		if(!first) return;
+		if(!children[first]) return;
 		children[first].focusNotes(pathNotes);
 	}
 

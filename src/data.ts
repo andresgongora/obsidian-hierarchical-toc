@@ -1,4 +1,4 @@
-import { BaseScanner } from 'base_scanner';
+import { BaseScanner } from './base_scanner';
 
 export class NoteData
 {

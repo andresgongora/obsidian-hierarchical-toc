@@ -1,5 +1,5 @@
 import { App, Notice} from 'obsidian';
-import  HierarchicalTocPlugin  from 'main';
+import HierarchicalTocPlugin from './main';
 
 export class YamlParser
 {
@@ -49,7 +49,14 @@ export class YamlParser
     {
         const file = this.app.workspace.getActiveFile();
         if(!file) return;
-        await this.app.fileManager.processFrontMatter(file, (fm) => { this._fm_add_link(fm, file_id, yamlProp); });
+        try
+        {
+            await this.app.fileManager.processFrontMatter(file, (fm) => { this._fm_add_link(fm, file_id, yamlProp); });
+        }
+        catch(err)
+        {
+            this.showMessage(`Failed to update ${yamlProp}: ${err}`);
+        }
     }
 
     _fm_replace_link(front: Record<string, string[]>, selected: string, prop: string, old_link:string)
@@ -85,7 +92,7 @@ export class YamlParser
         }
         else
         {
-            front[prop] = [];
+            this.showMessage(`Can't find ${old_link}: ${prop} is empty`);
         }
     }
 
@@ -93,7 +100,14 @@ export class YamlParser
     {
         const file = this.app.workspace.getActiveFile();
         if(!file) return;
-        await this.app.fileManager.processFrontMatter(file, (fm) => { this._fm_replace_link(fm, file_id, yamlProp, old_link); });
+        try
+        {
+            await this.app.fileManager.processFrontMatter(file, (fm) => { this._fm_replace_link(fm, file_id, yamlProp, old_link); });
+        }
+        catch(err)
+        {
+            this.showMessage(`Failed to update ${yamlProp}: ${err}`);
+        }
     }
 
     _fm_get_links(front: Record<string, string[]>, prop: string)
@@ -112,7 +126,14 @@ export class YamlParser
     {
         const file = this.app.workspace.getActiveFile();
         if(!file) return;
-        await this.app.fileManager.processFrontMatter(file, (fm) => { callback(this._fm_get_links(fm, yamlProp)); });
+        try
+        {
+            await this.app.fileManager.processFrontMatter(file, (fm) => { callback(this._fm_get_links(fm, yamlProp)); });
+        }
+        catch(err)
+        {
+            this.showMessage(`Failed to read ${yamlProp}: ${err}`);
+        }
     }
 
     _fm_remove_link(front: Record<string, string[]>, prop: string, old_link:string)
@@ -135,7 +156,14 @@ export class YamlParser
     {
         const file = this.app.workspace.getActiveFile();
         if(!file) return;
-        await this.app.fileManager.processFrontMatter(file, (fm) => { this._fm_remove_link(fm, yamlProp, old_link); });
+        try
+        {
+            await this.app.fileManager.processFrontMatter(file, (fm) => { this._fm_remove_link(fm, yamlProp, old_link); });
+        }
+        catch(err)
+        {
+            this.showMessage(`Failed to update ${yamlProp}: ${err}`);
+        }
     }
 };
 

@@ -1,25 +1,26 @@
 {
   "compilerOptions": {
-    "baseUrl": "./src",
     "inlineSourceMap": true,
     "inlineSources": true,
     "module": "ESNext",
-    "target": "ES6",
+    "target": "ES2020",
     "allowJs": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
     "noImplicitAny": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "importHelpers": true,
     "isolatedModules": true,
-	"strictNullChecks": true,
-  "strictPropertyInitialization": false,
+    "strictNullChecks": true,
+    "strictPropertyInitialization": false,
     "lib": [
       "DOM",
-      "ES5",
-      "ES6",
-      "ES7"
+      "ES2020"
     ]
   },
   "include": [
     "**/*.ts"
-  ]
+  ],
+  "exclude": ["node_modules"]
 }

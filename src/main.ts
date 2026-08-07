@@ -2,10 +2,10 @@ import { TAbstractFile, Plugin, TFile } from 'obsidian';
 import { WorkspaceLeaf } from "obsidian";
 import { data, active_id, centered_id, centered_children, show_child_count, auto_expand_tree, auto_expand_depth } from './components/stores';
 import { NoteData } from './data';
-import { BaseScanner } from 'base_scanner';
-import { VIEW_TYPE_VF, HierarchicalTocView as HierarchicalTocView } from 'tree_view';
-import { YamlParser } from 'yaml_parser';
-import { HierarchicalTocSettingTab, HierarchicalTocSettings, DEFAULT_SETTINGS } from 'settings';
+import { BaseScanner } from './base_scanner';
+import { VIEW_TYPE_VF, HierarchicalTocView as HierarchicalTocView } from './tree_view';
+import { YamlParser } from './yaml_parser';
+import { HierarchicalTocSettingTab, HierarchicalTocSettings, DEFAULT_SETTINGS } from './settings';
 
 export default class HierarchicalTocPlugin extends Plugin
 {
@@ -13,6 +13,7 @@ export default class HierarchicalTocPlugin extends Plugin
 	base: BaseScanner;
 	yaml: YamlParser;
 	settings: HierarchicalTocSettings;
+	private resolveTimer: ReturnType<typeof setTimeout> | null = null;
 
 	async onload()
 	{
@@ -51,6 +52,11 @@ export default class HierarchicalTocPlugin extends Plugin
 			this.registerEvent(this.app.vault.on("create", this.onCreateFile));
 			this.registerEvent(this.app.vault.on("delete", this.onDeleteFile));
 			this.registerEvent(this.app.vault.on("rename", this.onRenameFile));
+		});
+
+		this.register(() =>
+		{
+			if(this.resolveTimer !== null) clearTimeout(this.resolveTimer);
 		});
 	}
 
@@ -128,12 +134,22 @@ export default class HierarchicalTocPlugin extends Plugin
 		}
 	};
 
-	onRenameFile = (file: TAbstractFile, _oldPath: string) =>
+	onRenameFile = (file: TAbstractFile, oldPath: string) =>
 	{
 		if(file instanceof TFile)
 		{
+			// carry utime forward: rescan keys notes by new path, so the
+			// old id would otherwise be lost and utime reset to 0
+			const oldUtime = this.base.note_by_id(oldPath)?.utime;
+
 			this.data.onRename();
 			this.update_data();
+
+			if(oldUtime !== undefined)
+			{
+				const renamed = this.base.note_by_id(file.path);
+				if(renamed) renamed.utime = oldUtime;
+			}
 		}
 	};
 
@@ -144,8 +160,20 @@ export default class HierarchicalTocPlugin extends Plugin
 			return;
 		}
 
-		this.data.onChange();
-		this.update_data();
+		// debounce: metadataCache fires "resolve" per file; a large vault
+		// startup can emit thousands of events, each triggering a full
+		// rescan. Coalesce bursts into a single rescan.
+		if(this.resolveTimer !== null)
+		{
+			clearTimeout(this.resolveTimer);
+		}
+
+		this.resolveTimer = setTimeout(() =>
+		{
+			this.resolveTimer = null;
+			this.data.onChange();
+			this.update_data();
+		}, 200);
 	};
 
 	revealFile(path: string[])
@@ -185,6 +213,7 @@ export default class HierarchicalTocPlugin extends Plugin
 
 	updateUsedTime(file_id:string)
     {
-        this.base.note_list[file_id].utime = Date.now();
+        const note = this.base.note_by_id(file_id);
+        if(note) note.utime = Date.now();
     }
 }

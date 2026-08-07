@@ -1,5 +1,5 @@
 import { SuggestModal, Notice } from 'obsidian';
-import  HierarchicalTocPlugin  from 'main';
+import HierarchicalTocPlugin from './main';
 
 function get_link_base(link:string)
 {

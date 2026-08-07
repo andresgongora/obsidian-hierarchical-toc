@@ -1,7 +1,7 @@
-import { App, TFile } from 'obsidian';
-import { OneNote } from 'onenote';
-import  HierarchicalTocPlugin  from 'main';
-import { SortTypes } from 'settings';
+import { App, TFile, Notice } from 'obsidian';
+import { OneNote } from './onenote';
+import HierarchicalTocPlugin from './main';
+import { SortTypes } from './settings';
 
 function _is_string(value: unknown)
 {
@@ -83,6 +83,7 @@ export class BaseScanner
         this.build_top();
         this.sort_links();
         this.restore_utime(old_list)
+        this.warn_cyclic_notes();
     }
 
     get_filtred_count()
@@ -183,6 +184,11 @@ export class BaseScanner
                     const link_id = link_file.path;
                     if(!(link_id in this.note_list)) continue;
 
+                    // dedup: repeated identical [[link]] entries in the same
+                    // YAML array would otherwise inflate count_children() and
+                    // produce duplicate rendered rows / duplicate paths
+                    if(this.note_list[file_id].parents.includes(link_id)) continue;
+
                     this.note_list[file_id].parents.push(link_id);
                     this.note_list[link_id].children.push(file_id);
                 }
@@ -217,6 +223,48 @@ export class BaseScanner
         }
     }
 
+    // notes whose entire parent chain forms a cycle (e.g. A -> B -> A) never
+    // satisfy is_top() and are unreachable by walking down from top_list, so
+    // they'd otherwise vanish from the tree with no indication why.
+    find_cyclic_notes(): string[]
+    {
+        const cyclic: string[] = [];
+
+        for (const start_id in this.note_list)
+        {
+            const visited = new Set<string>();
+            const stack = [...this.note_list[start_id].parents];
+
+            let in_cycle = false;
+            while(stack.length > 0)
+            {
+                const cur = stack.pop() as string;
+                if(cur === start_id) { in_cycle = true; break; }
+                if(visited.has(cur)) continue;
+                visited.add(cur);
+
+                const note = this.note_list[cur];
+                if(note) stack.push(...note.parents);
+            }
+
+            if(in_cycle) cyclic.push(start_id);
+        }
+
+        return cyclic;
+    }
+
+    warn_cyclic_notes()
+    {
+        const cyclic = this.find_cyclic_notes();
+        if(cyclic.length === 0) return;
+
+        new Notice(
+            `Hierarchical TOC: ${cyclic.length} note(s) have a circular ` +
+            `parent chain and won't appear in the tree: ${cyclic.slice(0, 5).join(', ')}` +
+            (cyclic.length > 5 ? ', ...' : '')
+        );
+    }
+
     old_l_sort(links: string[])
 	{
 		const pinned = [];
@@ -226,7 +274,8 @@ export class BaseScanner
 
 		for(const id of links)
 		{
-            const note = this.note_list[id];
+            const note = this.note_by_id(id);
+            if(!note) continue;
 
         	if(note.is_pinned)
 			{
@@ -408,7 +457,11 @@ export class BaseScanner
 
         for(const path of path_list)
         {
-            const parent:string = path[path.length-2];
+            // path always has at least 2 elements here (top/root marker +
+            // the note itself), but guard short paths defensively so a
+            // malformed path can't silently key into 'undefined'.
+            const parent:string|undefined = path[path.length-2];
+            if(parent === undefined) continue;
             if (!(parent in parent_list)) parent_list[parent] = [];
             parent_list[parent].push(path);
         }
