@@ -6,5 +6,6 @@
 	"description": "Displays child notes of the active note in a hierarchical tree view (fork of Virtual Folder).",
 	"author": "andresgongora",
 	"authorUrl": "https://github.com/andresgongora",
+	"fundingUrl": "https://buymeacoffee.com/andresgongora",
 	"isDesktopOnly": false
 }

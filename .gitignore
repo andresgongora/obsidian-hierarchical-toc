@@ -13,11 +13,25 @@ node_modules
 *.js
 esbuild.config.mjs
 
+# Build intermediate: esbuild-svelte's raw CSS output before it's combined
+# into styles.css (the file Obsidian actually loads). Not a shipped asset.
+main.css
+
 # Exclude sourcemaps
 *.map
 
 # obsidian
 data.json
 
+# Jest coverage output
+coverage/
+
 # Exclude macOS Finder (System Explorer) View States
 .DS_Store
+
+# Agent working docs
+.agent/
+AGENTS.md
+
+# test coverage reports
+coverage/
