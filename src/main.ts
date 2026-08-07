@@ -61,7 +61,8 @@ export default class HierarchicalTocPlugin extends Plugin
 	}
 
 	async loadSettings() {
-		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+		const loaded = (await this.loadData()) as Partial<HierarchicalTocSettings>;
+		this.settings = Object.assign({}, DEFAULT_SETTINGS, loaded) as HierarchicalTocSettings;
 	}
 
 	async saveSettings() {
@@ -181,7 +182,7 @@ export default class HierarchicalTocPlugin extends Plugin
 		for (const leaf of this.app.workspace.getLeavesOfType(VIEW_TYPE_VF))
 		{
 			if (!(leaf.view instanceof HierarchicalTocView)) continue;
-			leaf.view.component.focusTo(path);
+			(leaf.view.component as unknown as { focusTo(path: string[]): void }).focusTo(path);
 		}
 	}
 

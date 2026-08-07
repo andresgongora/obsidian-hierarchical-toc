@@ -112,7 +112,7 @@ export class BaseScanner
         {
             if(prop in metadata.frontmatter)
             {
-                const value = metadata.frontmatter[prop];
+                const value = metadata.frontmatter[prop] as unknown;
                 return _is_string(value) ? value : null;
             }
         }
@@ -198,7 +198,7 @@ export class BaseScanner
             {
                 if("IsPinned" in metadata.frontmatter)
                 {
-                    const value = metadata.frontmatter["IsPinned"];
+                    const value = metadata.frontmatter["IsPinned"] as unknown;
                     this.note_list[file_id].is_pinned = (value != "0" && value != "false");
                 }
             }

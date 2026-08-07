@@ -72,7 +72,7 @@ export class VF_SelectPropModal  extends SuggestModal<NoteLink>
 
 		if(file)
 		{
-			await this.app.fileManager.processFrontMatter(file, (fm) => {this._get_prop_list(fm, this.yamlProp); });
+			await this.app.fileManager.processFrontMatter(file, (fm: Record<string, string[]>) => {this._get_prop_list(fm, this.yamlProp); });
 
             for(const item of this.prop_list)
             {

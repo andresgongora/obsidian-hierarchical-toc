@@ -47,17 +47,17 @@ export class YamlParser
 
     async add_link(yamlProp:string, file_id:string)
     {
-        const file = this.app.workspace.getActiveFile();
-        if(!file) return;
-        try
-        {
-            await this.app.fileManager.processFrontMatter(file, (fm) => { this._fm_add_link(fm, file_id, yamlProp); });
-        }
-        catch(err)
-        {
-            this.showMessage(`Failed to update ${yamlProp}: ${err}`);
-        }
-    }
+         const file = this.app.workspace.getActiveFile();
+         if(!file) return;
+         try
+         {
+             await this.app.fileManager.processFrontMatter(file, (fm: Record<string, string[]>) => { this._fm_add_link(fm, file_id, yamlProp); });
+         }
+         catch(err)
+         {
+             this.showMessage(`Failed to update ${yamlProp}: ${err}`);
+         }
+     }
 
     _fm_replace_link(front: Record<string, string[]>, selected: string, prop: string, old_link:string)
     {
@@ -98,17 +98,17 @@ export class YamlParser
 
     async replace_link(yamlProp:string, old_link:string, file_id:string)
     {
-        const file = this.app.workspace.getActiveFile();
-        if(!file) return;
-        try
-        {
-            await this.app.fileManager.processFrontMatter(file, (fm) => { this._fm_replace_link(fm, file_id, yamlProp, old_link); });
-        }
-        catch(err)
-        {
-            this.showMessage(`Failed to update ${yamlProp}: ${err}`);
-        }
-    }
+         const file = this.app.workspace.getActiveFile();
+         if(!file) return;
+         try
+         {
+             await this.app.fileManager.processFrontMatter(file, (fm: Record<string, string[]>) => { this._fm_replace_link(fm, file_id, yamlProp, old_link); });
+         }
+         catch(err)
+         {
+             this.showMessage(`Failed to update ${yamlProp}: ${err}`);
+         }
+     }
 
     _fm_get_links(front: Record<string, string[]>, prop: string)
     {
@@ -124,17 +124,17 @@ export class YamlParser
 
     async get_links(yamlProp:string, callback: (result: string[]) => void)
     {
-        const file = this.app.workspace.getActiveFile();
-        if(!file) return;
-        try
-        {
-            await this.app.fileManager.processFrontMatter(file, (fm) => { callback(this._fm_get_links(fm, yamlProp)); });
-        }
-        catch(err)
-        {
-            this.showMessage(`Failed to read ${yamlProp}: ${err}`);
-        }
-    }
+         const file = this.app.workspace.getActiveFile();
+         if(!file) return;
+         try
+         {
+             await this.app.fileManager.processFrontMatter(file, (fm: Record<string, string[]>) => { callback(this._fm_get_links(fm, yamlProp)); });
+         }
+         catch(err)
+         {
+             this.showMessage(`Failed to read ${yamlProp}: ${err}`);
+         }
+     }
 
     _fm_remove_link(front: Record<string, string[]>, prop: string, old_link:string)
     {
@@ -154,17 +154,17 @@ export class YamlParser
 
     async remove_link(yamlProp:string, old_link:string)
     {
-        const file = this.app.workspace.getActiveFile();
-        if(!file) return;
-        try
-        {
-            await this.app.fileManager.processFrontMatter(file, (fm) => { this._fm_remove_link(fm, yamlProp, old_link); });
-        }
-        catch(err)
-        {
-            this.showMessage(`Failed to update ${yamlProp}: ${err}`);
-        }
-    }
+         const file = this.app.workspace.getActiveFile();
+         if(!file) return;
+         try
+         {
+             await this.app.fileManager.processFrontMatter(file, (fm: Record<string, string[]>) => { this._fm_remove_link(fm, yamlProp, old_link); });
+         }
+         catch(err)
+         {
+             this.showMessage(`Failed to update ${yamlProp}: ${err}`);
+         }
+     }
 };
 
 
