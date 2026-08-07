@@ -3,6 +3,7 @@
 [![GitHub release](https://img.shields.io/github/v/release/andresgongora/obsidian-hierarchical-toc)](https://github.com/andresgongora/obsidian-hierarchical-toc/releases)
 [![Obsidian minAppVersion](https://img.shields.io/badge/obsidian-%E2%89%A50.15.0-7c3aed)](https://obsidian.md)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy_Me_A_Coffee-tip-yellow)](https://buymeacoffee.com/andresgongora)
 
 Hierarchical TOC is an Obsidian plugin that shows the children of your current note in a sidebar
 tree, built from a `parent` field in each note's frontmatter. Open any note and its immediate
@@ -69,6 +70,24 @@ C (active)
 
 Expand any node to reveal its children one level further. The tree always starts collapsed on
 refresh, so large vaults stay readable.
+
+<!------------------------------------------------------------------------------------------------->
+## Configuration
+<!------------------------------------------------------------------------------------------------->
+
+Go to Settings → Hierarchical TOC to manage these options:
+
+| Field | Description |
+| ----- | ----------- |
+| YAML for note's folders | Frontmatter property name that stores the parent (default: `up`) |
+| Sorting | Sort by: file name, title, created, or modified |
+| Reverse sort order | Invert the chosen sort order |
+| List of ignored paths | One path per line; notes under these paths are excluded from the tree |
+| Ignored files | Read-only count of notes currently excluded by the ignored-paths list |
+| Use wikilinks in YAML | Store parent as wikilink instead of plain text |
+| Show child count in tree | Display the number of children next to each tree node |
+| Auto-expand tree | Show the tree fully expanded when the active note changes |
+| Auto-expand depth limit | Maximum expansion depth when auto-expand is on; `0` expands all levels |
 
 <!------------------------------------------------------------------------------------------------->
 ## Installation
