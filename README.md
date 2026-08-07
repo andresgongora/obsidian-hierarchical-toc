@@ -1,7 +1,7 @@
 # Hierarchical TOC
 
 [![GitHub release](https://img.shields.io/github/v/release/andresgongora/obsidian-hierarchical-toc)](https://github.com/andresgongora/obsidian-hierarchical-toc/releases)
-[![Obsidian minAppVersion](https://img.shields.io/badge/obsidian-%E2%89%A50.15.0-7c3aed)](https://obsidian.md)
+[![Obsidian minAppVersion](https://img.shields.io/badge/obsidian-%E2%89%A51.7.2-7c3aed)](https://obsidian.md)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Buy Me A Coffee](https://img.shields.io/badge/Buy_Me_A_Coffee-tip-yellow)](https://buymeacoffee.com/andresgongora)
 
