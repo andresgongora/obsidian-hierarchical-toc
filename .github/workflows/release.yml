@@ -32,7 +32,7 @@ jobs:
 
       - name: Verify tag matches manifest.json
         run: |
-          manifest_version="$(node -e "console.log(require('./manifest.json').version)")"
+          manifest_version="$(node -e "try { console.log(require('./manifest.json').version) } catch(e) { console.error('Failed to parse manifest.json:', e.message); process.exit(1) }")"
           tag="${{ steps.tag.outputs.version }}"
           if [ "$tag" != "$manifest_version" ]; then
             echo "Error: Tag '$tag' does not match manifest.json version '$manifest_version'"
@@ -70,11 +70,12 @@ jobs:
         run: |
           version="${{ steps.tag.outputs.version }}"
           # Extract section for this version from CHANGELOG.md
-          # Handles formats: ## 1.0.7, ## [1.0.7], ## 1.0.7 (date)
+          # Handles formats: ## 1.0.7, ## [1.0.7], ## v1.0.7, ## 1.0.7 (date)
           awk -v ver="$version" '
             /^## / {
               if (found) exit
-              if ($0 ~ "\\[?" ver "\\]?") { found=1; print; next }
+              # Match: ## 1.0.7, ## [1.0.7], ## v1.0.7 (with optional brackets/v prefix)
+              if ($0 ~ "\\[?v?" ver "\\]?") { found=1; print; next }
             }
             found { print }
           ' CHANGELOG.md > release_notes.md
