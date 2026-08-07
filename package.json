@@ -3,7 +3,6 @@
 	"version": "1.0.9",
 	"description": "Displays child notes of the active note in a hierarchical tree view",
 	"main": "main.js",
-	"type": "module",
 	"scripts": {
 		"dev": "node esbuild.config.mjs",
 		"build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
