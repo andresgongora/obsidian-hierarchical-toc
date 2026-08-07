@@ -1,57 +1,32 @@
-# Hierarchical TOC Plugin
+# Hierarchical TOC
 
-A plugin for displaying child notes of the currently active note in a hierarchical tree view.
+[![GitHub release](https://img.shields.io/github/v/release/andresgongora/obsidian-hierarchical-toc)](https://github.com/andresgongora/obsidian-hierarchical-toc/releases)
+[![Obsidian minAppVersion](https://img.shields.io/badge/obsidian-%E2%89%A50.15.0-7c3aed)](https://obsidian.md)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-## About
+Hierarchical TOC is an Obsidian plugin that shows the children of your current note in a sidebar
+tree, built from a `parent` field in each note's frontmatter. Open any note and its immediate
+children appear one level at a time, so you can navigate a knowledge graph without folders dictating
+its shape.
 
-This plugin is a fork of [obsidian-virt-folder](https://github.com/gr0grig/obsidian-virt-folder) by
-gr0grig. I am very thankful to the original author for creating such a useful foundation.
-
-**Key Difference**: While the original Virtual Folder plugin provides an overview of your entire
-vault's hierarchical structure, this plugin is modified to serve as a **Table of Contents (TOC) for
-the currently active note**. It displays only the child notes of the active note, not the entire
-vault hierarchy.
-
-## Installation
-
-### Using BRAT (Recommended for Beta Testing)
-
-The easiest way to install this plugin is using the
-[BRAT](https://github.com/TfTHacker/obsidian42-brat) (Beta Reviewers Auto-update Thingy) plugin:
-
-1. Install BRAT from the Obsidian Community Plugins
-2. Open the command palette and run the command **BRAT: Add a beta plugin for testing**
-3. Enter this repository URL: `https://github.com/andresgongora/obsidian-hierarchical-toc`
-4. Enable the plugin in Settings → Community Plugins
-
-BRAT will automatically keep the plugin updated with the latest changes from the repository.
-
-### Manual Installation
-
-1. Download the latest release from the [GitHub releases
-   page](https://github.com/andresgongora/obsidian-hierarchical-toc/releases)
-2. Extract the files to your vault's plugins folder: `<vault>/.obsidian/plugins/hierarchical-toc/`
-3. Reload Obsidian
-4. Enable the plugin in Settings → Community Plugins
-
+<!------------------------------------------------------------------------------------------------->
 ## How It Works
+<!------------------------------------------------------------------------------------------------->
 
-The plugin shows a tree view in the sidebar that displays notes linked by parent-child
-relationships:
+Add a `parent` field to a note's YAML frontmatter naming its parent note:
 
-- Notes should have a YAML frontmatter field `parent` with the name of the parent note
-- When you open a note, the tree view automatically refreshes to show its children
-- You can expand nodes to see their children one level at a time
-- The tree view starts collapsed on each refresh
+```yaml
+---
+parent: "Project Overview"
+---
+```
 
-## Example
+Open the tree view in the sidebar and it refreshes to the active note automatically. A note may
+list more than one parent, so the structure is a graph, not a strict tree — one note can appear
+under several branches at once. This relationship comes entirely from the `parent` field, not from
+folder location.
 
-### Complete Vault Hierarchy
-
-Here's a comprehensive example showing the complete hierarchical structure of a vault. Note that
-**each note may have more than one parent** (notice for eaxmple `F`), creating a flexible knowledge
-graph rather than a strict tree. Also note that this relationship **is note defined by folder
-structure** but rather by the `parent` field in each note's frontmatter.
+Consider a vault with these relationships:
 
 ```text
 A
@@ -79,12 +54,10 @@ A
             └── N
 ```
 
-### Active Note View
+Note `F` appears under both `B` and `C` — it has two parents. Open note `C` and the tree view shows
+only its direct descendants:
 
-When you open a specific note in Hierarchical TOC, **only its children are displayed**. For example,
-if note **C** is the active note, the tree view would show:
-
-```
+```text
 C (active)
 ├── F
 │   └── K
@@ -94,14 +67,60 @@ C (active)
 └── H
 ```
 
-This focused view helps you navigate the immediate descendants of your current note, making it
-easier to explore your knowledge base one level at a time without being overwhelmed by the entire
-vault structure.
+Expand any node to reveal its children one level further. The tree always starts collapsed on
+refresh, so large vaults stay readable.
 
-## Further Reading
+<!------------------------------------------------------------------------------------------------->
+## Installation
+<!------------------------------------------------------------------------------------------------->
 
-For a comprehensive understanding of hierarchical note structures and the original plugin's
-capabilities, please refer to:
+### Using BRAT
 
-- [Original Virtual Folder plugin](https://github.com/gr0grig/obsidian-virt-folder/)
-- [Virtual Folder documentation on GitBook](https://virtfolder.gitbook.io/index)
+1. Install [BRAT](https://github.com/TfTHacker/obsidian42-brat) from Community Plugins.
+2. Run command: **BRAT: Add a beta plugin for testing**.
+3. Enter: `https://github.com/andresgongora/obsidian-hierarchical-toc`.
+4. Enable the plugin in Settings → Community plugins.
+
+BRAT keeps the plugin updated with the latest changes in the repository.
+
+### Manual Installation
+
+1. Download the latest release from the [releases page](https://github.com/andresgongora/obsidian-hierarchical-toc/releases).
+2. Extract the files into `<vault>/.obsidian/plugins/hierarchical-toc/`.
+3. Reload Obsidian.
+4. Enable the plugin in Settings → Community plugins.
+
+<!------------------------------------------------------------------------------------------------->
+## Privacy
+<!------------------------------------------------------------------------------------------------->
+
+This plugin makes no network calls, collects no telemetry, and does not access files outside your
+vault. It reads note frontmatter to build the tree and stores your plugin settings locally via
+Obsidian's plugin data.
+
+<!------------------------------------------------------------------------------------------------->
+## Origin
+<!------------------------------------------------------------------------------------------------->
+
+Hierarchical TOC is a fork of [Virtual Folder](https://github.com/gr0grig/obsidian-virt-folder) by
+gr0grig. The original plugin renders your entire vault's hierarchy as a virtual folder tree; this
+fork narrows that view to a table of contents for the active note, showing only its children
+instead of the whole vault.
+
+Further reading on the parent structure this plugin builds on:
+
+- [Virtual Folder plugin](https://github.com/gr0grig/obsidian-virt-folder/)
+- [Virtual Folder documentation](https://virtfolder.gitbook.io/index)
+
+<!------------------------------------------------------------------------------------------------->
+## Donations
+<!------------------------------------------------------------------------------------------------->
+
+If you like this project and want to show your support,
+[buy me a coffee](https://buymeacoffee.com/andresgongora). Caffeine goes in, code comes out.
+
+<!------------------------------------------------------------------------------------------------->
+## License
+<!------------------------------------------------------------------------------------------------->
+
+MIT License. See [LICENSE](LICENSE) for details.

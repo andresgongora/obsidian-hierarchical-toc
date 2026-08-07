@@ -1,5 +1,22 @@
 # CHANGELOG
 
+## [Unreleased]
+
+- Fix: `updateUsedTime` no longer throws on missing note id.
+- Fix: rename preserves `utime` (used/created marker) instead of resetting it.
+- Fix: debounce `metadataCache "resolve"` handling to avoid full-graph rescans on large-vault startup.
+- Fix: dedup repeated `[[link]]` entries in frontmatter parent/child links.
+- Fix: mutually-cyclic `parent` chains now warn via Notice instead of silently
+  vanishing from the tree.
+- Fix: YAML frontmatter link helpers (`add_link`/`replace_link`/`get_links`/`remove_link`)
+  handle `processFrontMatter` rejection instead of leaving it unhandled.
+- Fix: `replace_link` no longer silently blanks the prop when it's absent; reports it instead.
+- Fix: tree view `focusTo` guards against a missing child node.
+- Fix: `scrollIntoMiddle` used `myElement.win` (undefined) instead of `window`.
+- Add: unit test suite (Jest) covering `base_scanner.ts`, `onenote.ts`, `yaml_parser.ts`,
+  `data.ts`, `settings.ts`.
+- Docs: rewritten README, refreshed AGENTS.md, added local deploy command reference.
+
 ## [1.0.9]
 
 - Undo suppressions.
