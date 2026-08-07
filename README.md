@@ -121,10 +121,10 @@ Obsidian's plugin data.
 ## Origin
 <!------------------------------------------------------------------------------------------------->
 
-Hierarchical TOC is a fork of [Virtual Folder](https://github.com/gr0grig/obsidian-virt-folder) by
-gr0grig. The original plugin renders your entire vault's hierarchy as a virtual folder tree; this
-fork narrows that view to a table of contents for the active note, showing only its children
-instead of the whole vault.
+Hierarchical TOC was initially scaffolded from [Virtual Folder](https://github.com/gr0grig/obsidian-virt-folder)
+by gr0grig, but has diverged significantly. The original plugin renders your entire vault's hierarchy
+as a virtual folder tree; Hierarchical TOC narrows that view to a table of contents for the active note,
+showing only its children instead of the whole vault, with a different data model and UI.
 
 Further reading on the parent structure this plugin builds on:
 
